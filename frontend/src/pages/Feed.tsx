@@ -22,6 +22,7 @@ export default function Feed() {
     useEffect(() => {
         const fetchFeed = async () => {
             try {
+                setLoading(true);
                 const response = await api.get("/posts/feed");
                 setPosts(response.data.posts);
 

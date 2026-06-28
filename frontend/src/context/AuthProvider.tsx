@@ -37,6 +37,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         toast.success("Logout successfull")
     };
 
+    const updateUser = (userData: User) => {
+    setUser({...userData});
+};
+
     useEffect(() => {
         if (accessToken) {
             syncTokenToAxios(accessToken);
@@ -44,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, [accessToken]);
 
     return (
-        <AuthContext.Provider value={{ user, accessToken, login, logout }}>
+        <AuthContext.Provider value={{ user, accessToken, login, logout, updateUser }}>
             {children}
         </AuthContext.Provider>
     );

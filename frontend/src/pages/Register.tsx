@@ -36,7 +36,7 @@ export default function Register() {
         <div className="h-screen flex items-center justify-center gap-14">
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <input
-                    className="border rounded p-2 w-67"
+                    className="border border-white rounded p-2 w-67 dark:text-white"
                     type="text"
                     autoComplete="current-username"
                     value={name}
@@ -46,7 +46,7 @@ export default function Register() {
                     disabled={loading}
                 />
                 <input
-                    className="border rounded p-2 w-67"
+                    className="border border-white rounded p-2 w-67 dark:text-white"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -56,7 +56,7 @@ export default function Register() {
                 />
 
                 <input
-                    className="border rounded p-2 w-67"
+                    className="border border-white rounded p-2 w-67 dark:text-white"
                     type="password"
                     autoComplete="current-password"
                     value={password}
@@ -66,7 +66,7 @@ export default function Register() {
                     disabled={loading}
                 />
 
-                <p className="text-sm text-taupe-400 hover:text-taupe-600">
+                <p className="text-sm text-taupe-400 hover:text-taupe-600 dark:hover:text-taupe-300">
                     Already have an account?&nbsp;
                     <Link to="/login" className="text-blue-500 hover:text-blue-700 underline">
                         Login

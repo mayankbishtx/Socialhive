@@ -10,7 +10,7 @@ export default function Navbar() {
 
         <div className="backdrop-blur-2xl max-w-2xl mx-auto sticky top-8 bg-white/60 flex border-black p-3 items-center justify-between px-8 shadow-lg rounded-full">
             <div className="font-bold text-xl cursor-pointer" onClick={() => navigate("/")}>
-                App
+                Social
             </div>
             <div className="flex flex-row gap-6">
                 <button

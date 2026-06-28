@@ -72,7 +72,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
                 <button
                     type="submit"
                     disabled={posting}
-                    className="bg-blue-500 hover:bg-blue-600 shdaow-lg text-white px-3 py-1 rounded disabled:opacity-50 cursor-pointer"
+                    className="bg-blue-500 hover:bg-blue-600 shdaow-lg text-white px-3 py-1 rounded disabled:opacity-50 cursor-pointer shadow-md"
                 >
                     {posting ? "Posting..." : "Post"}
                 </button>

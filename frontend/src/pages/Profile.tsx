@@ -26,18 +26,17 @@ export default function Profile() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
-    const { user: currentUser } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
-    const [user, setUser] = useState<User | null>(null); //for fol
 
     const handleFollow = async () => {
         try {
             if (isFollowing) {
                 await api.delete(`/users/${id}/unfollow`);
-                toast.success(`You unfollow ${user!.name}`);
+                toast.success("Unfollow");
             } else {
                 await api.post(`/users/${id}/follow`);
-                toast.success(`You started following ${user!.name}`);
+                toast.success("Follow");
             }
             setIsFollowing(!isFollowing);
 
@@ -47,16 +46,9 @@ export default function Profile() {
     }
 
     useEffect(() => {
-        const getUser = async () => {
-            const res  = await api.get(`/users/${id}`);
-            setUser(res.data);
-        };
-        getUser();
-    }, [id])
-
-    useEffect(() => {
         const fetchProfile = async () => {
             try {
+                setLoading(true);
                 const profileRes = await api.get(`/users/${id}`);
                 setProfile(profileRes.data);
                 setIsFollowing(profileRes.data.isFollowing);
@@ -95,7 +87,7 @@ export default function Profile() {
     return (
         <div className="max-w-xl mt-10 mx-auto p-4 shadow-2xl bg-mauve-50 rounded">
             <div className="flex gap-6 items-start">
-                <img src={profile.avatar || "/default-avatar.png"} className="w-28 h-28 rounded-full " />
+                <img src={profile.avatar || "/default-avatar.png"} className="w-28 h-28 rounded-full shadow-lg" />
                 <div className="flex flex-col flex-1">
                     <h1 className="text-xl font-bold ">{profile.name}</h1>
 
@@ -104,15 +96,17 @@ export default function Profile() {
                         <span>{profile.followers} Followers</span>
                         <span>{profile.following} Following</span>
                     </div>
-                    <button
-                        onClick={handleFollow}
-                        className="mt-4 w-fit bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                        {isFollowing ? "Unfollow" : "Follow"}
-                    </button>
-                    {currentUser!.id === id && (
+
+                    {user!.id === id ? (
                         <button onClick={() => navigate("/update-profile")}
                             className="px-4 py-2 rounded mt-2 bg-emerald-500 shadow-sm text-white hover:bg-emerald-600">
                             Edit Profile
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleFollow}
+                            className="mt-4 w-fit bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                            {isFollowing ? "Unfollow" : "Follow"}
                         </button>
                     )}
                 </div>

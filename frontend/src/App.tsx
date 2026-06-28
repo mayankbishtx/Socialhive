@@ -17,7 +17,7 @@ export default function App() {
   const { accessToken } = useAuth();
 
   return (
-    <div className="min-h-screen  bg-mist-100">
+    <div className="min-h-screen  bg-[#302E2B]">
        <Toaster />
        
       <BrowserRouter>

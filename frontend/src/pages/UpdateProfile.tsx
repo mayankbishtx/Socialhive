@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 export default function UpdateProfile() {
 
-    const { user } = useAuth();
+    const { user, updateUser } = useAuth();
     const navigate = useNavigate();
 
     const [name, setName] = useState(user?.name || "");
@@ -26,12 +26,23 @@ export default function UpdateProfile() {
             formData.append("bio", bio)
             if (avatar) formData.append("avatar", avatar);
 
-            await api.put("/users/me", formData);
-            navigate(`/profile/${user!.id}`);
+            const res = await api.put("/users/me", formData);
+
+            const { user: freshUserData, accessToken: newAccessToken } = res.data;
+
+            if (freshUserData && newAccessToken) {
+                localStorage.setItem("user",JSON.stringify(freshUserData));
+                localStorage.setItem("accessToken", newAccessToken);
+
+                updateUser(freshUserData);
+                setName(updateUser.name);
+            }
+
+            navigate(`/profile/${freshUserData.id}`);
             toast.success("Profile updated successfully");
 
-
-        } catch {
+        } catch (err) {
+            console.log(err);
             setError("Failed to update profile")
         } finally {
             setLoading(false);

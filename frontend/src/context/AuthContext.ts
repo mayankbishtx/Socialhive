@@ -11,6 +11,7 @@ export interface AuthContextType {
     accessToken: string | null;
     login: (user: User, token: string) => void;
     logout: () => void; 
+    updateUser: (updatedUser: User) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

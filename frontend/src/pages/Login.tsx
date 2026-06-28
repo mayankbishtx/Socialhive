@@ -39,7 +39,7 @@ export default function Login() {
         <div className="h-screen flex items-center justify-center gap-14">
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <input
-                    className="border rounded p-2 w-67"
+                    className="border border-white rounded p-2 w-67 dark:text-white"
                     type="email"
                     autoComplete="current-email"
                     value={email}
@@ -50,7 +50,7 @@ export default function Login() {
                 />
 
                 <input
-                    className="border rounded p-2 w-67"
+                    className="border border-white rounded p-2 w-67 dark:text-white"
                     type="password"
                     autoComplete="current-password"
                     value={password}
@@ -60,7 +60,7 @@ export default function Login() {
                     disabled={loading}
                 />
 
-                <p className="text-sm text-taupe-400 hover:text-taupe-600">Don't have an account?&nbsp;
+                <p className="text-sm text-taupe-400 hover:text-taupe-600 dark:hover:text-taupe-300">Don't have an account?&nbsp;
                     <Link to="/register" className="text-blue-500 underline">
                         Create Account
                     </Link>
