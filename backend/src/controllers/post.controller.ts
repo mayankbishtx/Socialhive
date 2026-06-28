@@ -36,6 +36,8 @@ export const createPost = async (req: AuthRequest, res: Response) => {
             image: imageUrl || ""
         })
 
+        await redis.del(`feed:${currentUserId}`);
+
         res.status(201).json({
             message: "Post create successfully",
             post
@@ -138,6 +140,8 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
         }
 
         await Post.findByIdAndDelete(postId);
+        
+        await redis.del(`feed:${currentUserId}`);
 
         res.status(200).json({ message: "Post deleted successfully" });
 

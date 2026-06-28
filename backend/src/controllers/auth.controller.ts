@@ -5,6 +5,7 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from ".
 import type { AuthRequest } from "../types";
 import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
+import redis from "../config/redis";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -36,7 +37,7 @@ export const register = async (req: Request, res: Response) => {
         const VerifyUrl = `http://localhost:3000/api/auth/verify-email/${rawToken}`;
 
         await sendEmail(
-            user.email, 
+            user.email,
             "Verify your email",
             `<h2>Welcome</h2><p>Click below to verify your email:</p>
             <a href="${VerifyUrl}">Verify Email</a>`
@@ -108,7 +109,7 @@ export const logout = async (req: Request, res: Response) => {
         })
 
         res.status(200).json({ message: "Logout successfully" });
-        
+
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     }
@@ -143,6 +144,17 @@ export const getMe = async (req: AuthRequest, res: Response) => {
             return;
         }
 
+        const newAccessToken = generateAccessToken({ id: user._id.toString() });
+
+        res.cookie("accesstoken", newAccessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        await redis.del(`feed:${user._id}`);
+
         res.status(200).json({
             user: {
                 id: user._id,
@@ -162,7 +174,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
         const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
-        const user = await User.findOne({ 
+        const user = await User.findOne({
             verificationToken: hashedToken,
             verificationTokenExpiry: { $gt: new Date() }
         }).select("+verificationToken +verificationTokenExpiry")
@@ -179,7 +191,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
         res.status(200).json({ message: "Email verified successfully" });
 
-        
+
     } catch (error) {
         res.status(500).json({ message: "Internal Server error" });
     }
