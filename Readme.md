@@ -1,6 +1,6 @@
-# Social - A Full-Stack Social Media Application
+# Social - A Full-Stack Image Sharing Platform
 
-A modern full-stack social media platform built with the MERN stack where users can connect, share posts, and interact with each other in real time.
+A modern full-stack image sharing platform where users can connect, share posts, and interact with each other in real time.
 
 ## Features
 
