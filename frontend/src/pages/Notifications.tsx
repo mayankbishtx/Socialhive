@@ -96,7 +96,7 @@ export default function Notifications() {
                     onClick={(() => markAsRead(n._id))}
                     className={`p-4 rounded border cursor-pointer ${n.isRead ? "bg-white" : "bg-blue-50"}`}>
                     <p>
-                        <span className="font-bold">{n.sender.name}</span>{" "}
+                        <span className="font-bold">{n.sender?.name ?? "Unknown User"}</span>{" "}
                         {n.type === "like" && "liked your post"}
                         {n.type === "comment" && "commented on your post"}
                         {n.type === "follow" && "started following you"}
