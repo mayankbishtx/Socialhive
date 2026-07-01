@@ -11,7 +11,8 @@ export const getNotifications = async (req: AuthRequest, res: Response) => {
             return;
         }
 
-        const notifications = (await Notification.find({ recipient: currentUserId })
+        const notifications = (
+            await Notification.find({ recipient: currentUserId })
             .sort({ createdAt: -1 })
             .populate("sender", "name avatar")
             .populate("post", "content image")
