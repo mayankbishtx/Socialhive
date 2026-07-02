@@ -188,6 +188,7 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
 export const searchUsers = async (req: AuthRequest, res: Response) => {
     try {
         const query = req.query.q as string;
+        const currentUserId = req.user?.id;
 
         if (!query || !query.trim()) {
             res.status(400).json({ message: "Search query is required"});
@@ -195,7 +196,8 @@ export const searchUsers = async (req: AuthRequest, res: Response) => {
         }
 
         const users = await User.find({
-            username: { $regex: query, $options: "i"}
+            _id: { $ne: currentUserId},
+            username: { $regex: query, $options: "i" } 
         }).select("name username avatar").limit(10);
 
         res.status(200).json({ users });
