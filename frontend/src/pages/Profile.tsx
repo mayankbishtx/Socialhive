@@ -82,15 +82,15 @@ export default function Profile() {
     if (!profile) return <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-linear-to-r from-white to-gray-500 bg-clip-text text-transparent"> User not found</div>
 
     return (
-        <div className="max-w-xl mt-10 mx-auto p-4 shadow-2xl bg-mauve-50 rounded">
+        <div className="max-w-xl mt-10 mx-auto p-4 border border-[#d3dce1] dark:border-[#303336]">
             <div className="flex gap-6 items-start">
                 <img src={profile.avatar || "/default-avatar.png"} className="w-28 h-28 rounded-full shadow-lg" />
                 <div className="flex flex-col flex-1">
-                    <h1 className="text-lg font-bold ">{profile.name}</h1>
-                    <p className="text-gray-500">@{profile.username}</p>
+                    <h1 className="text-lg font-bold dark:text-white">{profile.name}</h1>
+                    <p className="text-gray-500 dark:text-gray-100">@{profile.username}</p>
 
-                    <p className="text-gray-600 ">{profile.bio}</p>
-                    <div className="flex gap-6 mt-3">
+                    <p className="text-gray-600 dark:text-white">{profile.bio}</p>
+                    <div className="flex gap-6 mt-3 dark:text-white">
                         <span>{profile.followers} Followers</span>
                         <span>{profile.following} Following</span>
                     </div>
@@ -111,12 +111,12 @@ export default function Profile() {
             </div>
             <div className="mt-6 space-y-4">
                 {posts.map((post) => (
-                    <div key={post._id} className="border p-4 rounded">
+                    <div key={post._id} className="border border-[#d3dce1] dark:border-[#303336] p-4">
                         <div className="flex flex-row justify-between">
                             <div className="flex flex-col">
 
-                        <p className="font-bold">{post.author.name} · <span className="text-gray-600 text-sm/6 font-mediump">{timeAgo(post.createdAt)}</span></p>
-                            <p>{post.content}</p>
+                        <p className="font-bold dark:text-white">{post.author.name} · <span className="text-gray-600 text-sm/6 font-mediump dark:text-gray-100">{timeAgo(post.createdAt)}</span></p>
+                            <p className="dark:text-white">{post.content}</p>
                             </div>
                             {user!.id === id ?                             
                             <button

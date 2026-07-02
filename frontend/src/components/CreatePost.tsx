@@ -42,12 +42,12 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="border rounded p-4 mb-6 space-y-3">
+        <form onSubmit={handleSubmit} className="border border-[#d7dbdd] dark:border-[#303336] rounded p-4 mb-6 space-y-3 dark:text-white">
             <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What's on your mind?"
-                className="w-full border rounded p-2 resize-none shadow-sm"
+                className="w-full border border-[#d3dce1] dark:border-[#303336] rounded p-2 resize-none"
                 rows={3}
             />
 
@@ -56,7 +56,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
                     type="file"
                     accept="image/*"
                     onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                    className="text-sm border rounded p-1 border-neutral-700 w-55 shadow-sm cursor-pointer"
+                    className="text-sm border rounded p-1 border-[#d3dce1] dark:border-[#303336] w-55 shadow-sm cursor-pointer"
                 />
 
                 <button
