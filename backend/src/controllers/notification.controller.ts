@@ -12,7 +12,7 @@ export const getNotifications = async (req: AuthRequest, res: Response) => {
         }
 
         const notifications = (
-            await Notification.find({ recipient: currentUserId })
+            await Notification.find({ recipient: currentUserId, isRead: false })
             .sort({ createdAt: -1 })  // -1 means descending order (newest first)
             .populate("sender", "name avatar")
             .populate("post", "content image")
