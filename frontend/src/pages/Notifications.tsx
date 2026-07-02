@@ -37,22 +37,25 @@ export default function Notifications() {
     }, [])
 
     const markAsRead = async (id: string) => {
-        await api.put(`/notifications/${id}/read`);
-        setNotifications((prev) =>
-            prev.map((n) => (n._id === id ? { ...n, isRead: true } : n))
-        );
-            toast.success("Post is marked as read");
-
+        try {
+            await api.put(`/notifications/${id}/read`);
+            setNotifications((prev) => prev.filter((n) => n._id !== id));
+            toast.success("Notification is marked as read");
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to mark as read");
+        }
     };
 
     const markAllAsRead = async () => {
         try {
             await api.put("/notifications/read-all");
-            setNotifications(prev => prev.map(notification => ({ ...notification, isRead: true })));
+            setNotifications([]);
             toast.success("All posts are marked as read");
     
         } catch (error) {
             console.log(error);
+            toast.success("Failed to mark all as read");
         }
     }
 
@@ -94,7 +97,7 @@ export default function Notifications() {
                 <div
                     key={n._id}
                     onClick={(() => markAsRead(n._id))}
-                    className={`p-4 rounded border cursor-pointer ${n.isRead ? "bg-white" : "bg-blue-50"}`}>
+                    className={`p-4 rounded shadow-md border cursor-pointer ${n.isRead ? "bg-white" : "bg-blue-50"}`}>
                     <p>
                         <span className="font-bold">{n.sender?.name ?? "Unknown User"}</span>{" "}
                         {n.type === "like" && "liked your post"}
