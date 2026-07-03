@@ -80,7 +80,7 @@ export default function Profile() {
     }
 
     if (loading) return <Loading />
-    if (!profile) return <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-linear-to-r from-white to-gray-500 bg-clip-text text-transparent"> User not found</div>
+    if (!profile) return <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-black dark:bg-linear-to-r dark:from-white dark:to-gray-500 bg-clip-text text-transparent"> User not found</div>
 
     return (
         <div className="max-w-xl mt-10 mx-auto p-4 border border-[#d3dce1] dark:border-[#303336]">
@@ -112,7 +112,7 @@ export default function Profile() {
             </div>
             <div className="mt-6 space-y-4">
                 {posts.map((post) => (
-                    <div key={post._id} className="border-t border-[#ced5d9] dark:border-[#303336] p-4">
+                    <div key={post._id} className="border-t -mx-4 border-[#ced5d9] dark:border-[#303336] p-4">
                         <div className="flex flex-row justify-between">
                             <div className="flex flex-col">
 

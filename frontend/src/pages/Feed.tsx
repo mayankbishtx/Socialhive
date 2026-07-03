@@ -64,7 +64,7 @@ export default function Feed() {
     if (loading) return <Loading />
 
     return (
-        <div className="mt-10 max-w-xl mx-auto p-2 space-y-4 dark:bg-black ">
+        <div className="mt-10  max-w-xl mx-auto p-2 space-y-4  dark:bg-black ">
             <div className="rounded border border-[#d3dce1] dark:border-[#303336]">
 
                 <CreatePost onPostCreated={handlePostCreated} />

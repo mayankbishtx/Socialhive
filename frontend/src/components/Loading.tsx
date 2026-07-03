@@ -4,9 +4,9 @@ export default function LoadingPage() {
 
             <div className="fixed inset-0 -z-10 bg-[#0a0a0a]" />
 
-            <div className='h-8 w-8 bg-white rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-            <div className='h-8 w-8 bg-white rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-            <div className='h-8 w-8 bg-white rounded-full animate-bounce'></div>
+            <div className='h-8 w-8 bg-black dark:bg-white  rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+            <div className='h-8 w-8 bg-black dark:bg-white rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+            <div className='h-8 w-8 bg-black dark:bg-white rounded-full animate-bounce'></div>
             
         </div>
     )
