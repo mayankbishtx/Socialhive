@@ -63,7 +63,7 @@ export default function SearchBar() {
             />
 
             {showDropDown && (
-                <div className="absolute top-10 left-0 bg-white border rounded-lg shadow-lg w-64 z-50">
+                <div className="absolute top-10 left-0 bg-white dark:bg-black dark:text-white border rounded-lg shadow-lg w-64 z-50">
                     {loading && (
                         <p className="text-sm gray-400 p-3">Searching...</p>
                     )}
@@ -76,7 +76,7 @@ export default function SearchBar() {
                         <div
                             key={user._id}
                             onClick={() => handleSelect(user._id)}
-                            className="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer"
+                            className="flex items-center gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
                         >
                             <img src={user.avatar || "./default-avatar.png"} className="w-8 h-8 rounded-full object-cover" />
                             <div>
