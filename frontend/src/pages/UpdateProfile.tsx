@@ -52,7 +52,7 @@ export default function UpdateProfile() {
 
     return (
         <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-4 space-y-4">
-            <h1 className="text-xl font-bold dark: text-white">Update Profile</h1>
+            <h1 className="text-xl font-bold dark:text-white">Update Profile</h1>
 
             <input
                 type="text"
@@ -81,7 +81,7 @@ export default function UpdateProfile() {
             <button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-500 hover:bg-blue-600 text-white rounded cursor-pointer px-4 py-2 disabled:opacity-50 w-full shadow-lg">
+                className="bg-black hover:bg-gray-800 text-white dark:text-black dark:hover:bg-gray-200 dark:bg-white rounded cursor-pointer px-4 py-2 disabled:opacity-50 w-full shadow-lg">
                 {loading ? "Saving..." : "Save Changes"}
             </button>
 

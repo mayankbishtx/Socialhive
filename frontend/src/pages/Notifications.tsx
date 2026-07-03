@@ -87,9 +87,10 @@ export default function Notifications() {
 
     return (
         <div className="max-w-xl mt-10 mx-auto p-4 space-y-3 border border-[#d3dce1] dark:border-[#303336]">
+            
             <button 
             onClick={markAllAsRead}
-            className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded cursor-pointer text-white shadow-2xl">
+            className=" px-3 py-2 rounded bg-black shadow-sm text-white hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 dark:text-black">
                 Mark All As Read
             </button>
             

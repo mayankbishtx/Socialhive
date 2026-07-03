@@ -52,7 +52,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What's on your mind?"
-                className="w-full text-lg dark:border-[#303336] rounded resize-none"
+                className="w-full text-lg focus:outline-none rounded resize-none"
                 rows={3}
                 />
                 </div>

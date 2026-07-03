@@ -98,7 +98,7 @@ export default function Profile() {
 
                     {user!.id === id ? (
                         <button onClick={() => navigate("/update-profile")}
-                            className="px-4 py-2 rounded mt-2 bg-emerald-500 shadow-sm text-white hover:bg-emerald-600">
+                            className="px-4 py-2 rounded mt-2 cursor-pointer bg-black shadow-sm text-white hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 dark:text-black">
                             Edit Profile
                         </button>
                     ) : (
@@ -122,7 +122,7 @@ export default function Profile() {
                             {user!.id === id ?                             
                             <button
                                 onClick={(() => deletePost(post._id))}
-                                className="px-1 py-1 rounded cursor-pointer dark-bg-white dark:text-white">
+                                className="px-1 py-1 rounded cursor-pointer text-red-500 dark:text-white">
                                 <Delete/>
                             </button> : " "}
 
