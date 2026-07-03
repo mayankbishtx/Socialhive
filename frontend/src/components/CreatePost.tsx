@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import type { Posts } from "../types";
+import { useAuth } from "../context/useAuth";
 
 interface CreatePostProps {
     onPostCreated: (newPost: Posts) => void;
@@ -11,6 +12,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
     const [content, setContent] = useState("");
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [posting, setPosting] = useState(false);
+    const { user } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,26 +45,30 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
 
     return (
         <form onSubmit={handleSubmit} className="border border-[#d7dbdd] dark:border-[#303336] rounded p-4 mb-6 space-y-3 dark:text-white">
+            <div className="flex flex-row gap-3">
+
+            <img src={user!.avatar} className="size-10 rounded-full" />
             <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What's on your mind?"
-                className="w-full border border-[#d3dce1] dark:border-[#303336] rounded p-2 resize-none"
+                className="w-full text-lg dark:border-[#303336] rounded resize-none"
                 rows={3}
-            />
+                />
+                </div>
 
             <div className="flex items-center justify-between">
                 <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                    className="text-sm border rounded p-1 border-[#d3dce1] dark:border-[#303336] w-55 shadow-sm cursor-pointer"
+                    className="ml-13 text-sm border rounded p-1 border-[#d3dce1] dark:border-[#303336] w-55 shadow-sm cursor-pointer"
                 />
 
                 <button
                     type="submit"
                     disabled={posting}
-                    className="bg-blue-500 hover:bg-blue-600 shdaow-lg text-white px-3 py-1 rounded disabled:opacity-50 cursor-pointer shadow-md"
+                    className="bg-black hover:bg-gray-800 shdaow-lg text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black px-3 py-1 rounded disabled:opacity-50 cursor-pointer shadow-md"
                 >
                     {posting ? "Posting..." : "Post"}
                 </button>

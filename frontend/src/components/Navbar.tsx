@@ -12,7 +12,7 @@ export default function Navbar() {
 
     return (
 
-        <div className="backdrop-blur-2xl max-w-2xl mx-auto sticky top-8 bg-white/70 flex  p-3 items-center justify-between px-8 shadow-lg rounded-full">
+        <div className="backdrop-blur-2xl max-w-2xl mx-auto sticky top-8 bg-white/70 flex p-3 items-center justify-between px-8 shadow-lg rounded-full">
             <div className="font-bold text-xl cursor-pointer" onClick={() => navigate("/")}>
                 Social
             </div>
