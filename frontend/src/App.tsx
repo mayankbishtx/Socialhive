@@ -11,7 +11,7 @@ import { useAuth } from "./context/useAuth";
 import Navbar from "./components/Navbar";
 import UpdateProfile from "./pages/UpdateProfile";
 import { Toaster } from "react-hot-toast";
-
+import { Analytics } from "@vercel/analytics/next"
 export default function App() {
 
   const { accessToken } = useAuth();
@@ -65,6 +65,7 @@ export default function App() {
         </Routes>
 
       </BrowserRouter>
+      <Analytics/>
     </div>
   );
 };
