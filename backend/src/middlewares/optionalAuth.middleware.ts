@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../types";
 import { verifyAccessToken } from "../utils/generateToken";
+import logger from "../config/logger";
 
 export const optionalAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -13,7 +14,7 @@ export const optionalAuth = (req: AuthRequest, res: Response, next: NextFunction
             req.user = { id: decoded.id };
             
         } catch (error) {
-            
+            logger.error(error);
         }
     }
     next();

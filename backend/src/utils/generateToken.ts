@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import logger from "../config/logger";
 
 interface TokenPayload {
     id: string;
@@ -24,6 +25,7 @@ export const verifyAccessToken = (token: string): TokenPayload => {
         const decoded = jwt.verify(token, JWT_ACCESS_SECRET as string) as TokenPayload;
         return decoded;
     } catch (error) {
+        logger.error(error);
         throw new Error("Invalid or exired access token");
     }
 }
@@ -33,6 +35,7 @@ export const verifyRefreshToken = (token: string): TokenPayload => {
         const decoded = jwt.verify(token, JWT_REFRESH_SECRET as string) as TokenPayload;
         return decoded;
     } catch (error) {
+        logger.error(error);
         throw new Error("Invalid or expired refresh token");
     }
 };

@@ -1,6 +1,7 @@
 import type { NextFunction, Response } from "express"
 import type { AuthRequest } from "../types";
 import { verifyAccessToken } from "../utils/generateToken";
+import logger from "../config/logger";
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
     try {
@@ -19,6 +20,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
         next();
 
     } catch (error) {
+        logger.error(error);
         res.status(401).json({ message: "Invalid or expired token"});
     }
 };
