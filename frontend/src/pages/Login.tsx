@@ -37,11 +37,11 @@ export default function Login() {
 
     return (
         <div className="h-screen flex items-center justify-center gap-14">
-            <div className=" flex items-center flex-col rounded-xl p-10 py-25 shadow-sm bg-black dark:bg-white">
-                <h1 className="text-2xl font-bold text-white mb-8 dark:text-black">Welcome back!</h1>
+            <div className=" flex items-center flex-col rounded-xl p-10 py-25 bg-white dark:bg-black border border-[#bcbdb2] dark:border-[#4b4b47]">
+                <h1 className="text-2xl font-bold text-black mb-8 dark:text-white">Welcome back!</h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <input
-                        className="border rounded p-2 w-67 text-white dark:text-black"
+                        className="border rounded p-2 w-67 text-black dark:text-white"
                         type="email"
                         autoComplete="current-email"
                         value={email}
@@ -52,7 +52,7 @@ export default function Login() {
                     />
 
                     <input
-                        className="border rounded p-2 w-67 text-white dark:text-black"
+                        className="border rounded p-2 w-67 text-black dark:text-white"
                         type="password"
                         autoComplete="current-password"
                         value={password}
@@ -62,7 +62,7 @@ export default function Login() {
                         disabled={loading}
                     />
 
-                    <p className="text-sm text-taupe-400 hover:text-gray-300 dark:hover:text-gray-700">Don't have an account?&nbsp;
+                    <p className="text-sm text-taupe-400 hover:text-gray-500 dark:hover:text-gray-200">Don't have an account?&nbsp;
                         <Link to="/register" className="text-blue-500 underline">
                             Create Account
                         </Link>
@@ -73,8 +73,8 @@ export default function Login() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="mt-4 p-2 w-35 self-center border rounded-md cursor-pointer bg-taupe-700 
-                    hover:bg-taupe-800 text-white">
+                        className="mt-4 p-2 w-35 self-center border rounded-md cursor-pointer bg-black
+                    hover:bg-gray-900 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black">
                         {loading ? "Logging in..." : "Login"}
                     </button>
                 </form>
