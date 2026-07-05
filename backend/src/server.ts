@@ -19,6 +19,13 @@ import "./config/redis";
 import mongoose from "mongoose";
 
 const app = express();
+
+app.get("/api/test", (req, res) => {
+    return res.status(200).json({
+        message: "Backend reached"
+    });
+});
+
 const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
