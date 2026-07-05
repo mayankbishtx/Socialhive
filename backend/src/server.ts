@@ -16,9 +16,11 @@ import { initSocket } from "./socket";
 import morgan from "morgan";
 import logger from "./config/logger";
 import "./config/redis";
+import mongoose from "mongoose";
 
 const app = express();
 const httpServer = http.createServer(app);
+const io = initSocket(httpServer);
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -37,6 +39,7 @@ export const allowedOrigins = [
   ].filter((origin): origin is string => Boolean(origin));
 
 app.use(helmet());
+app.set("trust proxy", 1);
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, Postman, or server-to-server)
@@ -69,4 +72,17 @@ initSocket(httpServer);
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
     logger.info(`Server is running on http://localhost:${PORT}`);
+})
+
+process.on("SIGTERM", () => {
+  logger.info("SIGTERM received. Shutting down...");
+
+  io.close(() => {
+  httpServer.close(async () => {  //Stop accepting new request & finish closing the server
+    await mongoose.connection.close();
+
+    logger.info("Server and database connection closed");
+    process.exit(0);
+  })
+})
 })
