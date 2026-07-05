@@ -22,7 +22,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
-const apilimiter = rateLimit({
+const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 500,
     message: { message: "Too many requests, please try again later" }
@@ -54,7 +54,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(apilimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended : true }));
 app.use(cookieParser());
@@ -62,6 +61,7 @@ app.use(morgan("combined", { stream: morganStream }));
 
 connectDB();
 
+app.use("/api", apiLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
