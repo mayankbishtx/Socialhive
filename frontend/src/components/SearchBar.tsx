@@ -41,10 +41,10 @@ export default function SearchBar() {
 
     }, [query]);
 
-    const handleSelect = (userId: string) => {
+    const handleSelect = (username: string) => {
         setQuery("");
         setResults([]);
-        navigate(`/profile/${userId}`);
+        navigate(`/profile/${username}`);
     };
 
     return (
@@ -75,7 +75,7 @@ export default function SearchBar() {
                     {results.map((user) => (
                         <div
                             key={user._id}
-                            onClick={() => handleSelect(user._id)}
+                            onClick={() => handleSelect(user.username)}
                             className="flex items-center gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
                         >
                             <img src={user.avatar || "./default-avatar.png"} className="w-8 h-8 rounded-full object-cover" />

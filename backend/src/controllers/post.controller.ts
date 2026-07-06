@@ -83,7 +83,7 @@ export const getFeed = async (req: AuthRequest, res: Response) => {
 
         const posts = await Post.find({ author: { $in: authorIds } })
             .sort({ createdAt: -1 })
-            .populate("author", "name avatar")
+            .populate("author", "name username avatar")
 
         await redis.set(cachekey, JSON.stringify(posts), "EX", 60);
 
@@ -97,16 +97,18 @@ export const getFeed = async (req: AuthRequest, res: Response) => {
 
 export const getUserPosts = async (req: AuthRequest, res: Response) => {
     try {
-        const userId = req.params.id as string;
+        const { username } = req.params;
 
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            res.status(400).json({ message: "Invalid User ID" });
+        const user = await User.findOne({ username });
+
+        if (!user ) {
+            res.status(404).json({ message: "User not found" });
             return;
         }
 
-        const posts = await Post.find({ author: userId })
+        const posts = await Post.find({ author: user._id })
             .sort({ createdAt: -1 })
-            .populate("author", "name avatar")
+            .populate("author", "name username avatar")
 
         res.status(200).json({ posts });
 

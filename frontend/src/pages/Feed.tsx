@@ -70,13 +70,13 @@ export default function Feed() {
                     const isLiked = post.likes.includes(user!.id);
                     return (
                         <div key={post._id} className="border border-[#d3dce1] dark:border-[#303336] p-4 dark:text-white">
-                            <div className="flex flex-rol items-center gap-2 cursor-pointer " onClick={() => navigate(`/profile/${post.author._id}`)}>
+                            <div className="flex flex-rol items-center gap-2 cursor-pointer " onClick={() => navigate(`/profile/${post.author.username}`)}>
                                 <img src={post.author.avatar} className="rounded-full size-10" />
                                 <span className="flex flex-rol items-center gap-1"><p className="text-sm font-medium hover:underline">{post.author.name}</p>·<span className="text-gray-600 text-sm/6 font-medium dark:text-gray-200">{timeAgo(post.createdAt)}</span></span>
                             </div>
                             <p className="ml-12">{post.content}</p>
                             {post.image && <img src={post.image} className="mt-2 rounded-2xl border border-neutral-300 dark:border-[#303336]" />}
-                            <button onClick={(() => handleLike(post._id, isLiked))} className="flex items-center gap-1 mt-2">
+                            <button onClick={() => handleLike(post._id, isLiked)} className="flex items-center gap-1 mt-2">
                                 <Heart size={18}
                                     className={isLiked ? "fill-red-500 text-red-500" : "text-gray-400"} /> {post.likes.length}
                             </button>

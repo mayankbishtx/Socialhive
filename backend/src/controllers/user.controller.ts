@@ -12,30 +12,27 @@ import logger from "../config/logger";
 export const followUser = async (req: AuthRequest, res: Response) => {
     try {
         const currentUserId = req.user?.id;
-        const targetUserId = req.params.id as string;
+        const { username } = req.params;
+
+        const targetUser = await User.findOne({ username });
+
+        if (!targetUser) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        const targetUserId = targetUser._id.toString();
 
         if (currentUserId === targetUserId) {
             res.status(400).json({ message: "You cannot follow yourself" });
             return;
         }
 
-        if (!mongoose.Types.ObjectId.isValid(targetUserId)) {
-            res.status(400).json({ message: "Invalid user ID" });
-            return;
-        }
-
-        const userExist = await User.findById(targetUserId);
-        if (!userExist) {
-            res.status(404).json({ message: "User not found" });
-            return;
-        }
-
-        await User.findByIdAndUpdate(currentUserId, { $addToSet: { following: targetUserId } });
+        await User.findByIdAndUpdate(currentUserId, { $addToSet: { following: targetUser._id } });
         await User.findByIdAndUpdate(targetUserId, { $addToSet: { followers: currentUserId } });
 
-        if (currentUserId !== targetUserId) {
             await Notification.create({
-                recipient: targetUserId,
+                recipient: targetUser._id,
                 sender: currentUserId,
                 type: "follow"
             });
@@ -45,7 +42,6 @@ export const followUser = async (req: AuthRequest, res: Response) => {
                 sender: currentUserId,
                 message: "Someone started follwing you"
             });
-        }
 
         await redis.del(`feed:${currentUserId}`);
 
@@ -60,25 +56,23 @@ export const followUser = async (req: AuthRequest, res: Response) => {
 export const unfollowUser = async (req: AuthRequest, res: Response) => {
     try {
         const currentUserId = req.user?.id;
-        const targetUserId = req.params.id as string;
+        const { username } = req.params;
 
-        if (currentUserId === targetUserId) {
-            res.status(400).json({ message: "Operation not allowed" });
-            return;
-        }
+        const targetUser = await User.findOne({ username });
 
-        if (!mongoose.Types.ObjectId.isValid(targetUserId)) {
-            res.status(400).json({ message: "Invalid user ID" });
-            return;
-        }
-
-        const userExist = await User.findById(targetUserId);
-        if (!userExist) {
+        if (!targetUser) {
             res.status(404).json({ message: "User not found" });
             return;
         }
 
-        await User.findByIdAndUpdate(currentUserId, { $pull: { following: targetUserId } });
+        const targetUserId = targetUser._id.toString();
+
+        if (currentUserId === targetUserId) {
+            res.status(400).json({ message: "You cannot  not allowed" });
+            return;
+        }
+
+        await User.findByIdAndUpdate(currentUserId, { $pull: { following: targetUser._id } });
         await User.findByIdAndUpdate(targetUserId, { $pull: { followers: currentUserId } });
 
         await redis.del(`feed:${currentUserId}`);
@@ -93,28 +87,20 @@ export const unfollowUser = async (req: AuthRequest, res: Response) => {
 
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
     try {
-        const id = req.params.id as string;
+        const { username } = req.params;
         const currentUserId = req.user?.id;
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            res.status(404).json({ message: "Invalid ID" });
-            return;
-        }
-
-        const user = await User.findById(id);
+        const user = await User.findOne({ username });
         if (!user) {
-            res.status(404).json({ message: "Invalid User ID" });
+            res.status(404).json({ message: "User not found" });
             return;
         }
 
         const isFollowing = currentUserId ? user.followers.some(followerId => followerId.toString() === currentUserId) : false;
 
-        await redis.del(`feed:${currentUserId}`);
-
         res.status(200).json({
             name: user.name,
             username: user.username,
-            email: user.email,
             bio: user.bio,
             avatar: user.avatar,
             followers: user.followers.length,

@@ -44,7 +44,7 @@ export default function App() {
             </ProtectedRoute>
           } />
 
-          <Route path="/profile/:id" element={
+          <Route path="/profile/:username" element={
             <ProtectedRoute>
               <Profile />
             </ProtectedRoute>

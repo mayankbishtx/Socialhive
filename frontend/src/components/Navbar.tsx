@@ -29,7 +29,7 @@ export default function Navbar() {
                     </button>
 
                     <button
-                        onClick={() => navigate(`/profile/${user!.id}`)}
+                        onClick={() => navigate(`/profile/${user!.username}`)}
                         className={`cursor-pointer shadow-lg border px-2 py-2 rounded-full dark:border-[#8e8e85] dark:bg-black ${location.pathname === `/profile/${user!.id}` ? 'bg-gray-200 dark:bg-gray-500' : ''}`}>
                         <User size={18} className="dark:text-white" />
                     </button>
@@ -81,7 +81,7 @@ export default function Navbar() {
                             <button onClick={() => { navigate("/"); setMenuOpen(false); }}>
                                 Home
                             </button>
-                            <button onClick={() => { navigate(`/profile/${user!.id}`); setMenuOpen(false); }}>
+                            <button onClick={() => { navigate(`/profile/${user!.username}`); setMenuOpen(false); }}>
                                 profile
                             </button>
                             <button onClick={() => { navigate("/notifications"); setMenuOpen(false); }}>

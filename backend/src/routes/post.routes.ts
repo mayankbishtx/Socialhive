@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/", authMiddleware, upload.single("image"), createPost);
 router.get("/feed", authMiddleware, getFeed);
-router.get("/user/:id", authMiddleware, getUserPosts);
+router.get("/user/:username", authMiddleware, getUserPosts);
 router.delete("/:id", authMiddleware, deletePost);
 router.post("/:id/like", authMiddleware, likePost);
 router.delete("/:id/unlike", authMiddleware, unlikePost);

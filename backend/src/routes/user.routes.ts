@@ -7,9 +7,9 @@ import { optionalAuth } from "../middlewares/optionalAuth.middleware";
 const router = Router();
 
 router.put("/me", authMiddleware, upload.single("avatar"), updateProfile);
-router.post("/:id/follow", authMiddleware, followUser);
-router.delete("/:id/unfollow", authMiddleware, unfollowUser);
+router.post("/:username/follow", authMiddleware, followUser);
+router.delete("/:username/unfollow", authMiddleware, unfollowUser);
 router.get("/search", authMiddleware, searchUsers);
-router.get("/:id",optionalAuth ,getUserProfile);
+router.get("/:username",optionalAuth ,getUserProfile);
 
 export default router;

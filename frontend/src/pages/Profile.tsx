@@ -19,7 +19,7 @@ interface User {
 
 export default function Profile() {
 
-    const { id } = useParams();
+    const { username } = useParams<{ username: string }>();
     const [profile, setProfile] = useState<User | null>(null);
     const [posts, setPosts] = useState<Posts[]>([]);
     const [loading, setLoading] = useState(true);
@@ -30,10 +30,10 @@ export default function Profile() {
     const handleFollow = async () => {
         try {
             if (isFollowing) {
-                await api.delete(`/users/${id}/unfollow`);
+                await api.delete(`/users/${username}/unfollow`);
                 toast.success("Unfollow");
             } else {
-                await api.post(`/users/${id}/follow`);
+                await api.post(`/users/${username}/follow`);
                 toast.success("Follow");
             }
             setIsFollowing(!isFollowing);
@@ -44,14 +44,16 @@ export default function Profile() {
     }
 
     useEffect(() => {
+        if (!username) return;
+
         const fetchProfile = async () => {
             try {
                 setLoading(true);
-                const profileRes = await api.get(`/users/${id}`);
+                const profileRes = await api.get(`/users/${username}`);
                 setProfile(profileRes.data);
                 setIsFollowing(profileRes.data.isFollowing);
 
-                const postsRes = await api.get(`/posts/user/${id}`)
+                const postsRes = await api.get(`/posts/user/${username}`)
                 setPosts(postsRes.data.posts);
 
             } catch (error) {
@@ -63,7 +65,7 @@ export default function Profile() {
         };
         fetchProfile();
 
-    }, [id])
+    }, [username])
 
     const deletePost = async (postId: string) => {
         try {
@@ -80,12 +82,12 @@ export default function Profile() {
     }
 
     if (loading) return <Loading />
-    if (!profile) return <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-black dark:bg-linear-to-r dark:from-white dark:to-gray-500 bg-clip-text text-transparent"> User not found</div>
+    if (!profile) return <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-linear-to-r from-black to-gray-400 dark:bg-linear-to-r dark:from-white dark:to-gray-500 bg-clip-text text-transparent"> User not found</div>
 
     return (
         <div className="max-w-xl lg:mt-10 mx-auto p-4 border rounded border-[#d3dce1] dark:border-[#303336]">
             <div className="flex gap-6 items-start">
-                <img src={profile.avatar || "/default-avatar.png"} className="w-28 h-28 rounded-full shadow-lg" />
+                <img src={profile.avatar || "/default-avatar.png"} className="w-28 h-28 rounded-full" />
                 <div className="flex flex-col flex-1">
                     <h1 className="text-lg font-bold dark:text-white">{profile.name}</h1>
                     <p className="text-gray-500 dark:text-gray-100">@{profile.username}</p>
@@ -96,7 +98,7 @@ export default function Profile() {
                         <span>{profile.following} Following</span>
                     </div>
 
-                    {user!.id === id ? (
+                    {user?.username === username ? (
                         <button onClick={() => navigate("/update-profile")}
                             className="px-4 py-2 rounded mt-2 cursor-pointer bg-black shadow-sm text-white hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 dark:text-black">
                             Edit Profile
@@ -116,15 +118,15 @@ export default function Profile() {
                         <div className="flex flex-row justify-between">
                             <div className="flex flex-col">
 
-                        <p className="font-bold dark:text-white">{post.author.name} · <span className="text-gray-600 text-sm/6 font-mediump dark:text-gray-100">{timeAgo(post.createdAt)}</span></p>
-                            <p className="dark:text-white">{post.content}</p>
+                                <p className="font-bold dark:text-white">{post.author.name} · <span className="text-gray-600 text-sm/6 font-mediump dark:text-gray-100">{timeAgo(post.createdAt)}</span></p>
+                                <p className="dark:text-white">{post.content}</p>
                             </div>
-                            {user!.id === id ?                             
-                            <button
-                                onClick={(() => deletePost(post._id))}
-                                className="px-1 py-1 rounded cursor-pointer text-red-500 dark:text-white">
-                                <Delete/>
-                            </button> : " "}
+                            {user!.username === username ?
+                                <button
+                                    onClick={(() => deletePost(post._id))}
+                                    className="px-1 py-1 rounded cursor-pointer text-red-500 dark:text-white">
+                                    <Delete />
+                                </button> : " "}
 
                         </div>
                         {post.image && <img src={post.image} className="mt-2 rounded-2xl border border-[#dcdec1] dark:border-[#2c2c2d]" />}
