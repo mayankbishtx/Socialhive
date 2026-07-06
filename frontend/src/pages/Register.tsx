@@ -10,6 +10,7 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const unusedTestVariable = 123;
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
