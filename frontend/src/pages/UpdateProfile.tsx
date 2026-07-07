@@ -38,7 +38,7 @@ export default function UpdateProfile() {
                 setName(updateUser.name);
             }
 
-            navigate(`/profile/${freshUserData.id}`);
+            navigate(`/profile/${user!.username}`);
             toast.success("Profile updated successfully");
 
         } catch (err) {

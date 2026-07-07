@@ -82,7 +82,7 @@ export default function Navbar() {
                                 Home
                             </button>
                             <button onClick={() => { navigate(`/profile/${user!.username}`); setMenuOpen(false); }}>
-                                profile
+                                Profile
                             </button>
                             <button onClick={() => { navigate("/notifications"); setMenuOpen(false); }}>
                                 Notifications
