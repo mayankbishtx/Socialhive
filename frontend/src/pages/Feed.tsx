@@ -86,7 +86,7 @@ export default function Feed() {
                     );
                 })}
                 {selectedImage && (
-                    <div onClick={() => setSelectedImage(null)} className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
+                    <div onClick={() => setSelectedImage(null)} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center">
                         <img src={selectedImage} className="max-w-[80%] max-h-[80%] object-contain rounded-2xl" />
                     </div>
                 )}
