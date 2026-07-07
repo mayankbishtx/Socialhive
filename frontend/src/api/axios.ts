@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL:import.meta.env.VITE_API_URL || "http://localhost:3000/api",
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
     withCredentials: true,
 });
 
@@ -13,8 +13,7 @@ export const setAccessToken = (token: string | null) => {
 
 api.interceptors.request.use((config) => {
     if (currentAccessToken) {
-        config.headers.Authorization =
-            `Bearer ${currentAccessToken}`;
+        config.headers.Authorization = `Bearer ${currentAccessToken}`;
     } else {
         delete config.headers.Authorization;
     }
@@ -22,44 +21,36 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-api.interceptors.response.use(
-    (response) => response,
+api.interceptors.response.use((response) => response, async (error) => {
+    const originalRequest = error.config;
 
-    async (error) => {
-        const originalRequest = error.config;
+    const isAuthRoute =
+        originalRequest?.url?.includes("/auth/login") ||
+        originalRequest?.url?.includes("/auth/register") ||
+        originalRequest?.url?.includes("/auth/refresh-token");
 
-        const isAuthRoute =
-            originalRequest?.url?.includes("/auth/login") ||
-            originalRequest?.url?.includes("/auth/register") ||
-            originalRequest?.url?.includes("/auth/refresh-token");
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRoute) {
+        originalRequest._retry = true;
 
-        if (
-            error.response?.status === 401 &&
-            !originalRequest._retry &&
-            !isAuthRoute
-        ) {
-            originalRequest._retry = true;
+        try {
+            const { data } = await api.post("/auth/refresh-token", {});
 
-            try {
-                const { data } = await api.post( "/auth/refresh-token", {});
+            const newAccessToken = data.accessToken;
 
-                const newAccessToken = data.accessToken;
+            setAccessToken(newAccessToken);
 
-                setAccessToken(newAccessToken);
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-                originalRequest.headers.Authorization =
-                    `Bearer ${newAccessToken}`;
+            return api(originalRequest);
 
-                return api(originalRequest);
-
-            } catch (refreshError) {
-                setAccessToken(null);
-                return Promise.reject(refreshError);
-            }
+        } catch (refreshError) {
+            setAccessToken(null);
+            return Promise.reject(refreshError);
         }
-
-        return Promise.reject(error);
     }
+
+    return Promise.reject(error);
+}
 );
 
 export default api;

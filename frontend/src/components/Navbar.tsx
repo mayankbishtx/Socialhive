@@ -24,20 +24,20 @@ export default function Navbar() {
                 <div className="flex flex-row gap-6">
                     <button
                         onClick={() => navigate("/")}
-                        className={`cursor-pointer px-2 py-2 border rounded-full shadow-lg dark:border-[#8e8e85] dark:bg-black ${location.pathname === '/' ? 'bg-gray-200 dark:bg-gray-500' : ''}`}>
+                        className={`cursor-pointer px-2 py-2 border rounded-full dark:border-[#8e8e85] dark:bg-black ${location.pathname === '/' ? 'bg-gray-100 dark:bg-gray-500' : ''}`}>
                         <House size={18} className="dark:text-white" />
                     </button>
 
                     <button
                         onClick={() => navigate(`/profile/${user!.username}`)}
-                        className={`cursor-pointer shadow-lg border px-2 py-2 rounded-full dark:border-[#8e8e85] dark:bg-black ${location.pathname === `/profile/${user!.id}` ? 'bg-gray-200 dark:bg-gray-500' : ''}`}>
+                        className={`cursor-pointer border px-2 py-2 rounded-full dark:border-[#8e8e85] dark:bg-black ${location.pathname === `/profile/${user!.username}` ? 'bg-gray-100 dark:bg-gray-500' : ''}`}>
                         <User size={18} className="dark:text-white" />
                     </button>
 
 
                     <button
                         onClick={() => navigate("/notifications")}
-                        className={`cursor-pointer px-2 py-2 rounded-full shadow-lg border dark:border-[#8e8e85] dark:bg-black ${location.pathname === '/notifications' ? 'bg-gray-200 dark:bg-gray-500' : ''}`}>
+                        className={`cursor-pointer px-2 py-2 rounded-full border dark:border-[#8e8e85] dark:bg-black ${location.pathname === '/notifications' ? 'bg-gray-100 dark:bg-gray-500' : ''}`}>
                         <Bell size={18} className="dark:text-white " />
                     </button>
 
@@ -49,7 +49,7 @@ export default function Navbar() {
                                 navigate("/login");
                             }
                         }}
-                        className="px-2 py-2 border rounded-full shadow-lg cursor-pointer dark:border-[#8e8e85] dark:bg-black">
+                        className="px-2 py-2 border rounded-full cursor-pointer dark:border-[#8e8e85] dark:bg-black">
                         <LogOut size={18} className="dark:text-white" />
                     </button>
                     <button onClick={toggleTheme} className="cursor-pointer p-2 rounded-full border dark:border-[#8e8e85] dark:bg-black">

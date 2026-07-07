@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext, type User } from "./AuthContext";
-import { setAccessToken as syncTokenToAxios } from "../api/axios";
+import api, { setAccessToken as syncTokenToAxios } from "../api/axios";
 import toast from "react-hot-toast";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -15,9 +15,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
 
     });
-    const [accessToken, setAccessToken] = useState<string | null>(() =>
-        localStorage.getItem("accessToken")
-    );
+    const [accessToken, setAccessToken] = useState<string | null>(() => {
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+            syncTokenToAxios(token);
+        }
+        return token;
+    });
 
     const login = (userData: User, token: string) => {
         setUser(userData);
@@ -27,17 +31,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("user", JSON.stringify(userData));
     }
 
-    const logout = () => {
-        setUser(null);
-        setAccessToken(null);
-        syncTokenToAxios(null);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("user");
-        toast.success("Logout successfull")
+    const logout = async () => {
+        try {
+            await api.post("/auth/logouut");
+
+        } catch (error) {
+            console.log("Logout Error", error);
+
+        } finally {
+            setUser(null);
+            setAccessToken(null);
+            syncTokenToAxios(null);
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("user");
+            toast.success("Logout successful")
+        }
+
     };
 
     const updateUser = (userData: User) => {
-        setUser({...userData});
+        setUser({ ...userData });
     };
 
     useEffect(() => {

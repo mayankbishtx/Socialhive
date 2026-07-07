@@ -125,12 +125,12 @@ export default function Profile() {
                             {user!.username === username ?
                                 <button
                                     onClick={(() => deletePost(post._id))}
-                                    className="px-1 py-1 rounded cursor-pointer text-red-500 dark:text-white">
+                                    className="px-1 py-1 rounded cursor-pointer text-black dark:text-white">
                                     <Delete />
                                 </button> : " "}
 
                         </div>
-                        {post.image && <img src={post.image} onClick={() => setSelectedImage(post.image!)} className="cursor-pointer mt-2 rounded-2xl border border-[#dcdec1] dark:border-[#2c2c2d]" />}
+                        {post.image && <img src={post.image} onClick={() => setSelectedImage(post.image!)} className="mt-2 rounded-2xl border border-[#dcdec1] dark:border-[#2c2c2d]" />}
                     </div>
                 ))}
                 {selectedImage && (
