@@ -7,9 +7,15 @@ const api = axios.create({
 
 let currentAccessToken: string | null = null;
 
+let onAccessTokenChange: ((token: string | null) => void) | null = null;
+
 export const setAccessToken = (token: string | null) => {
     currentAccessToken = token;
 };
+
+export const setAccessTokenChangeHandler = (handler: (token: string | null) => void) =>  {
+    onAccessTokenChange = handler;
+}
 
 api.interceptors.request.use((config) => {
     if (currentAccessToken) {
@@ -40,15 +46,19 @@ api.interceptors.response.use((response) => response, async (error) => {
             setAccessToken(newAccessToken);
             localStorage.setItem("accessToken", newAccessToken);
 
+            onAccessTokenChange?.(newAccessToken);
+
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-            const response = await api(originalRequest);
-
-            return response;
+            return api(originalRequest);
 
         } catch (refreshError) {
             setAccessToken(null);
-             localStorage.removeItem("accessToken");
+
+            localStorage.removeItem("accessToken");
+
+            onAccessTokenChange?.(null);
+
             return Promise.reject(refreshError);
         }
     }

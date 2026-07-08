@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext, type User } from "./AuthContext";
-import api, { setAccessToken as syncTokenToAxios } from "../api/axios";
+import api, { setAccessToken as syncTokenToAxios, setAccessTokenChangeHandler } from "../api/axios";
 import toast from "react-hot-toast";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -22,6 +22,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
         return token;
     });
+
+    useEffect(() => {
+        setAccessTokenChangeHandler((newToken) => {
+            setAccessToken(newToken);
+        });
+    }, []);
 
     const login = (userData: User, token: string) => {
         setUser(userData);
@@ -54,9 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     useEffect(() => {
-        if (accessToken) {
             syncTokenToAxios(accessToken);
-        }
     }, [accessToken]);
 
     return (
