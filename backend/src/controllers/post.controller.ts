@@ -14,6 +14,11 @@ export const createPost = async (req: AuthRequest, res: Response) => {
         const currentUserId = req.user?.id;
         const { content } = req.body;
 
+        if (!currentUserId) {
+            res.status(401).json({ message: "Unauthorised" });
+            return;
+        }
+
         if (!content || !content.trim()) {
             res.status(400).json({ message: "Post content is requried" });
             return;
@@ -25,20 +30,24 @@ export const createPost = async (req: AuthRequest, res: Response) => {
             imageUrl = await uploadToCloudinary(req.file.buffer, "posts") as string;
         }
 
-        if (!content || !content.trim()) {
-            res.status(400).json({ message: "Post content is requied" });
-            return;
-        }
-
         const post = await Post.create({
             author: currentUserId,
-            content,
+            content: content.trim(),
             image: imageUrl || ""
         });
 
-        await post.populate("author", "avatar name");
+        await post.populate("author", "avatar name username");
 
-        await redis.del(`feed:${currentUserId}`);
+        const currentUser = await User.findById(currentUserId).select("followers");
+
+        const cacheKeys = [
+            `feed:${currentUserId}`,
+            ...(currentUser?.followers ?? []).map(
+                followerId => `feed:${followerId.toString()}`
+            )
+        ];
+
+        if (cacheKeys.length > 0) await redis.del(...cacheKeys);
 
         res.status(201).json({
             message: "Post create successfully",
@@ -146,9 +155,18 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
             return;
         }
 
-        await Post.findByIdAndDelete(postId);
+        const currentUser = await User.findById(currentUserId).select("followers");
 
-        await redis.del(`feed:${currentUserId}`);
+        await post.deleteOne();
+
+        const cacheKeys = [
+            `feed:${currentUserId}`,
+            ...(currentUser?.followers ?? []).map(
+                followerId => `feed:${followerId.toString()}`
+            )
+        ];
+
+        if (cacheKeys.length > 0) await redis.del(...cacheKeys);
 
         res.status(200).json({ message: "Post deleted successfully" });
 
