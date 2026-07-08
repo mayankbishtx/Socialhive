@@ -15,14 +15,16 @@ export const createPost = async (req: AuthRequest, res: Response) => {
         const currentUserId = req.user?.id;
         const { content } = req.body;
 
+        console.log("content:", content);
+console.log("file:", !!req.file);
+
         if (!currentUserId) {
             res.status(401).json({ message: "Unauthorised" });
             return;
         }
 
-        if (!content || !content.trim()) {
-            res.status(400).json({ message: "Post content is requried" });
-            return;
+        if (!content?.trim() && !req.file) {
+            res.status(400).json({ message: "Post must contain image or content" });
         }
 
         let imageUrl: string | undefined;
@@ -33,11 +35,11 @@ export const createPost = async (req: AuthRequest, res: Response) => {
 
         const post = await Post.create({
             author: currentUserId,
-            content: content.trim(),
+            content: content?.trim() || "",
             image: imageUrl || ""
         });
 
-        await post.populate("author", "avatar name username");
+        await post.populate("author", "avatar name");
 
         await invalidateUserAndFollowerFeeds(currentUserId);
 
@@ -48,6 +50,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
 
     } catch (error) {
         logger.error(error);
+        console.error("CREATE POST ERROR:", error);
         res.status(500).json({ message: "Internal server error" })
     }
 }
@@ -146,6 +149,8 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
             res.status(403).json({ message: "Not authorized" })
             return;
         }
+
+        await post.deleteOne();
 
         await invalidateUserAndFollowerFeeds(currentUserId);
 

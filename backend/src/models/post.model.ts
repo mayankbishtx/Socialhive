@@ -26,8 +26,7 @@ const PostSchema = new Schema<IPost>({
         },
         content: {
             type: String,
-            required: [true, "Post cannot be empty"],
-            trim: true,
+            default: "",
             maxlength: 500,
         },
         image: {
