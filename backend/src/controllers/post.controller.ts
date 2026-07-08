@@ -8,6 +8,7 @@ import { emitToUser } from "../socket";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary";
 import redis from "../config/redis";
 import logger from "../config/logger";
+import { invalidateUserAndFollowerFeeds } from "../utils/invalidateFeedCache";
 
 export const createPost = async (req: AuthRequest, res: Response) => {
     try {
@@ -38,16 +39,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
 
         await post.populate("author", "avatar name username");
 
-        const currentUser = await User.findById(currentUserId).select("followers");
-
-        const cacheKeys = [
-            `feed:${currentUserId}`,
-            ...(currentUser?.followers ?? []).map(
-                followerId => `feed:${followerId.toString()}`
-            )
-        ];
-
-        if (cacheKeys.length > 0) await redis.del(...cacheKeys);
+        await invalidateUserAndFollowerFeeds(currentUserId);
 
         res.status(201).json({
             message: "Post create successfully",
@@ -155,18 +147,7 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
             return;
         }
 
-        const currentUser = await User.findById(currentUserId).select("followers");
-
-        await post.deleteOne();
-
-        const cacheKeys = [
-            `feed:${currentUserId}`,
-            ...(currentUser?.followers ?? []).map(
-                followerId => `feed:${followerId.toString()}`
-            )
-        ];
-
-        if (cacheKeys.length > 0) await redis.del(...cacheKeys);
+        await invalidateUserAndFollowerFeeds(currentUserId);
 
         res.status(200).json({ message: "Post deleted successfully" });
 

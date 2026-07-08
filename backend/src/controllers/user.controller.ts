@@ -1,7 +1,6 @@
 import type { Response } from "express"
 import type { AuthRequest } from "../types"
 import User from "../models/user.model";
-import mongoose from "mongoose";
 import Notification from "../models/notification.model";
 import { emitToUser } from "../socket";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary";
