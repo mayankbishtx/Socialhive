@@ -11,6 +11,7 @@ export interface User {
 export interface AuthContextType {
     user: User | null;
     accessToken: string | null;
+    authLoading: boolean;
     login: (user: User, token: string) => void;
     logout: () => void; 
     updateUser: (updatedUser: User) => void;
