@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import api from "../api/axios";
 import { useAuth } from "../context/useAuth";
 import Loading from "../components/Loading";
@@ -7,31 +7,24 @@ import timeAgo from "../utils/timeAgo";
 import type { Posts } from "../types";
 import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function Feed() {
 
-    const [posts, setPosts] = useState<Posts[]>([]);
-    const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const { user } = useAuth();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const fetchFeed = async () => {
-            try {
-                setLoading(true);
-                const response = await api.get("/posts/feed");
-                setPosts(response.data.posts);
-
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchFeed();
-
-    }, [])
+    const { data:posts = [], isLoading } = useQuery<Posts[]>({
+        queryKey: ["feed"],
+        queryFn: async () => {
+            const response = await api.get("/posts/feed");
+            return response.data.posts;
+        },
+        staleTime: 0,
+        refetchOnMount: true
+    })
 
     const handleLike = async (postId: string, isLiked: boolean) => {
         try {
@@ -41,7 +34,9 @@ export default function Feed() {
                 await api.post(`/posts/${postId}/like`);
             }
 
-            setPosts((prevPosts) =>
+            queryClient.setQueryData<Posts[]>(
+                ["feed"],
+                (prevPosts = []) =>
                 prevPosts.map((post) => {
                     if (post._id !== postId) return post;
 
@@ -58,10 +53,15 @@ export default function Feed() {
     };
 
     const handlePostCreated = (newPost: Posts) => {
-        setPosts((prev) => [newPost, ...prev]);
-    }
+        queryClient.setQueryData<Posts[]>(
+            ["feed"],
+            (prevPosts = []) => [
+                newPost, ...prevPosts
+            ]
+        );
+    };
 
-    if (loading) return <Loading />
+    if (isLoading) return <Loading />
 
     return (
         <div className="lg:mt-10 max-w-xl mx-auto p-2 space-y-4  dark:bg-black">
@@ -76,7 +76,7 @@ export default function Feed() {
                                 <span className="flex flex-rol items-center gap-1">
                                     <p
                                         onClick={() => navigate(`/profile/${post.author.username}`)}
-                                        className="text-sm font-medium hover:underline cursor-pointer ">
+                                        className="text-sm font-bold hover:underline cursor-pointer ">
                                         {post.author.name}
                                     </p>
                                     ·<span className="text-gray-600 text-sm/6 font-medium dark:text-gray-200">
