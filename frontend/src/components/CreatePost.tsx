@@ -16,8 +16,8 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!content) {
-            toast.error("Post content is required")
+        if (!content.trim() && !imageFile) {
+            toast.error("Post cannot be empty")
             return;
         }
 
@@ -25,7 +25,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
 
         try {
             const formData = new FormData();
-            formData.append("content", content);
+            if (content) formData.append("content", content);
             if (imageFile) formData.append("image", imageFile);
 
             const response = await api.post("/posts", formData);
@@ -35,7 +35,8 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
             setImageFile(null);
             toast.success("Post created");
 
-        } catch {
+        } catch(error) {
+            console.log(error);
             toast.error("Failed to create post");
         } finally {
             setPosting(false);
