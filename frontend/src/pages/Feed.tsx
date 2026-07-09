@@ -66,13 +66,13 @@ export default function Feed() {
     if (!user) return null;
 
     return (
-        <div className="lg:mt-10 max-w-xl mx-auto p-2 space-y-4  dark:bg-black">
+        <div className="lg:mt-8 max-w-xl mx-auto p-2 space-y-4  dark:bg-black">
             <div>
                 <CreatePost onPostCreated={handlePostCreated} />
                 {posts.map((post) => {
                     const isLiked = post.likes.includes(user.id);
                     return (    
-                        <div key={post._id} className="border border-[#d3dce1] dark:border-[#303336] p-4 dark:text-white">
+                        <div key={post._id} className="rounded border border-[#d3dce1] dark:border-[#303336] p-4 dark:text-white">
                             <div className="flex flex-rol items-center gap-2">
                                 <img src={post.author.avatar} className="rounded-full size-10" />
                                 <span className="flex flex-rol items-center gap-1">

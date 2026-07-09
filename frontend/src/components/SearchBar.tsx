@@ -13,9 +13,9 @@ export default function SearchBar() {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<SearchUser[]>([]);
     const [loading, setLoading] = useState(false);
-    const showDropDown = query.trim() !== "" && (loading || results.length > 0);
     const navigate = useNavigate();
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const showDropDown = query.trim() !== "" && (loading || results.length > 0);
 
     useEffect(() => {
         if (!query.trim()) return;
@@ -25,7 +25,7 @@ export default function SearchBar() {
         debounceRef.current = setTimeout(async () => {
             setLoading(true);
             try {
-                const res = await api.get(`/users/search?q=${query}`);
+                const res = await api.get(`/users/search?q=${encodeURIComponent(query)}`);
                 setResults(res.data.users);
 
             } catch (error) {

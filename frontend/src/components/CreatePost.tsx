@@ -45,7 +45,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="border border-[#d7dbdd] dark:border-[#303336] p-4 mb-6 space-y-3 dark:text-white">
+        <form onSubmit={handleSubmit} className="rounded border border-[#d7dbdd] dark:border-[#303336] p-4 mb-6 space-y-3 dark:text-white">
             <div className="flex flex-row gap-3">
 
             <img src={user!.avatar} className="size-10 rounded-full" />

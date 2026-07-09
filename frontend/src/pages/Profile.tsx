@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import api from "../api/axios";
 import Loading from "../components/Loading";
@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import timeAgo from "../utils/timeAgo";
 import type { Posts } from "../types";
 import { Delete } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface User {
     avatar?: string;
@@ -14,76 +15,103 @@ interface User {
     username: string;
     bio: string;
     followers: number;
-    following: number
+    following: number;
+    isFollowing: boolean;
 }
 
 export default function Profile() {
 
     const { username } = useParams<{ username: string }>();
-    const [profile, setProfile] = useState<User | null>(null);
-    const [posts, setPosts] = useState<Posts[]>([]);
-    const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [isFollowing, setIsFollowing] = useState(false);
     const { user } = useAuth();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const { data: profile, isLoading: profileLoading, isError: profileError } = useQuery<User>({
+        queryKey: ["profile", username],
+        queryFn: async () => {
+            const response = await api.get(`/users/${username}`);
+            return response.data;
+        },
+        enabled: !!username,
+        staleTime: 60 * 1000
+    });
+
+    const { data: posts = [], isLoading: postsLoading, isError: postsError } = useQuery<Posts[]>({
+        queryKey: ["profile-posts", username],
+        queryFn: async () => {
+            const response = await api.get(`/posts/user/${username}`);
+            return response.data.posts;
+        },
+        enabled: !!username,
+        staleTime: 0,
+        refetchOnMount: true
+    });
 
     const handleFollow = async () => {
+        if (!profile || !username) return;
+
         try {
-            if (isFollowing) {
+            if (profile.isFollowing) {
                 await api.delete(`/users/${username}/unfollow`);
-                toast.success("Unfollow");
+                toast.success("Unfollowed");
             } else {
                 await api.post(`/users/${username}/follow`);
-                toast.success("Follow");
+                toast.success("Followed");
             }
-            setIsFollowing(!isFollowing);
+            
+            const newFollowingState = !profile.isFollowing;
+
+            queryClient.setQueryData<User>(
+                ["profile", username],
+                (prevProfile) => {
+                    if (!prevProfile) return prevProfile;
+
+                    return {
+                        ...prevProfile,
+                        isFollowing: newFollowingState,
+                        followers: newFollowingState ? prevProfile.followers + 1 : prevProfile.followers - 1
+                    };
+                }
+            );
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    useEffect(() => {
-        if (!username) return;
-
-        const fetchProfile = async () => {
-            try {
-                setLoading(true);
-                const profileRes = await api.get(`/users/${username}`);
-                setProfile(profileRes.data);
-                setIsFollowing(profileRes.data.isFollowing);
-
-                const postsRes = await api.get(`/posts/user/${username}`)
-                setPosts(postsRes.data.posts);
-
-            } catch (error) {
-                console.log(error);
-
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProfile();
-
-    }, [username])
-
     const deletePost = async (postId: string) => {
+        if (!username) return;
         try {
             await api.delete(`/posts/${postId}`);
-            setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
+
+            queryClient.setQueryData<Posts[]>(
+                ["profile-posts", username],
+                (prevPosts = []) => prevPosts.filter((post) => post._id !== postId));
             toast.success("Post deleted");
 
         } catch (error) {
             console.log(error);
-
-        } finally {
-            setLoading(false);
         }
+    };
+
+    if (profileLoading || postsLoading) return <Loading />
+
+    if (profileError || !profile) {
+        return (
+            <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-linear-to-r from-black to-gray-400 dark:bg-linear-to-r dark:from-white dark:to-gray-500 bg-clip-text text-transparent">
+                User not found
+            </div>
+        )
     }
 
-    if (loading) return <Loading />
-    if (!profile) return <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-linear-to-r from-black to-gray-400 dark:bg-linear-to-r dark:from-white dark:to-gray-500 bg-clip-text text-transparent"> User not found</div>
+    if (postsError) {
+        return (
+            <div className="h-screen flex items-center justify-center text-5xl font-extrabold bg-linear-to-r from-black to-gray-400 dark:bg-linear-to-r dark:from-white dark:to-gray-500 bg-clip-text text-transparent">
+                Failed to fetch posts
+            </div>
+        )
+    }
 
     return (
         <div className="max-w-xl lg:mt-10 mx-auto p-4 border rounded border-[#d3dce1] dark:border-[#303336]">
@@ -108,7 +136,7 @@ export default function Profile() {
                         <button
                             onClick={handleFollow}
                             className="mt-4 w-fit bg-black hover:bg-gray-800 cursor-pointer text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black px-4 py-2 rounded">
-                            {isFollowing ? "Unfollow" : "Follow"}
+                            {profile.isFollowing ? "Unfollow" : "Follow"}
                         </button>
                     )}
                 </div>
@@ -121,12 +149,12 @@ export default function Profile() {
                                 <img src={post?.author?.avatar} className="rounded-full size-9" />
                                 <p className="ml-2 font-bold dark:text-white">{post.author.name} · <span className="text-gray-600 text-sm/6 font-mediump dark:text-gray-100">{timeAgo(post.createdAt)}</span></p>
                             </div>
-                            {user!.username === username ?
+                            {user?.username === username ?
                                 <button
                                 onClick={(() => deletePost(post._id))}
                                 className="px-1 py-1 rounded cursor-pointer text-black dark:text-white">
                                     <Delete />
-                                </button> : " "}
+                                </button> : null}
 
                         </div>
                                 <p className="ml-11 dark:text-white">{post.content}</p>
