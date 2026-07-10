@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { Search, X } from "lucide-react";
 
 interface SearchUser {
     _id: string;
@@ -30,6 +31,8 @@ export default function SearchBar() {
 
             } catch (error) {
                 console.log(error);
+                setResults([]);
+
             } finally {
                 setLoading(false);
             }
@@ -47,44 +50,62 @@ export default function SearchBar() {
         navigate(`/profile/${username}`);
     };
 
+    const clearSearch = () => {
+        setQuery("");
+        setResults([]);
+    };
+
     return (
-        <div className="relative">
+        <div className="relative w-56">
+
+            <div className="flex items-center w-52 md:w-full h-10 px-3 bg-gray-100 dark:bg-[#333536] border border-transparent focus-within:border-gray-300 dark:focus:focus-within:border-gray-600 rounded-xl transition-colors">
+                <Search size={17} className="shrink-0 text-gray-400"/>
+
             <input
                 type="text"
                 value={query}
                 onChange={(e) => {
                     const value = e.target.value;
                     setQuery(value);
-
+                    
                     if (!value.trim()) setResults([]);
                 }}
-                placeholder="Search Users..."
-                className="border rounded-full px-4 py-1 text-sm w-40 focus:outline-none focus:w-44 transition-all dark:text-black border-[#484843] dark:bg-gray-200"
-            />
+                placeholder="Search users"
+                className="w-full ml-2 bg-transparent outline-none text-sm text-gray-900 dark:text-white placeholder:text-gray-400"
+                />  
 
+                {query && (
+                    <button type="button" onClick={clearSearch} className="shrink-0 p-1 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-200 dark:hover:text-white dark:hover:bg-gray-700 transition-colors cursor-pointer">
+                        <X/>
+                    </button>
+                )}
+
+        </div>
             {showDropDown && (
-                <div className="absolute top-10 left-0 bg-white dark:bg-black dark:text-white border border-[#dcdec1] dark:border-[#363636] rounded-lg shadow-lg w-64 z-50">
+                <div className="absolute top-10 left-0 w-72 overflow-y-auto bg-white dark:bg-black border border-gray-200 dark:border-[#303336] rounded-lg shadow-xl p-2 z-50">
                     {loading && (
-                        <p className="text-sm gray-400 p-3">Searching...</p>
-                    )}
-
-                    {!loading && results.length === 0 && (
-                        <p className="text-sm text-gray-400 p-3">No users found</p>
-                    )}
-
-                    {results.map((user) => (
-                        <div
-                            key={user._id}
-                            onClick={() => handleSelect(user.username)}
-                            className="flex items-center gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-                        >
-                            <img src={user.avatar || "./default-avatar.png"} className="w-8 h-8 rounded-full object-cover" />
-                            <div>
-                                <p className="text-sm font-medium">{user.name}</p>
-                                <p className="text-xs text-gray-400">{user.username}</p>
-                            </div>
+                        <div className="px-3 py-4">
+                            <p className="text-sm text-gray-400 p-3">Searching...</p>
                         </div>
-                    ))}
+                    )}
+
+                    {!loading && (                        
+                        results.map((user) => (
+                            <button
+                                type="button"
+                                key={user._id}
+                                onClick={() => handleSelect(user.username)
+                            }
+                            className="flex items-center gap-3 p-2.5 w-full rounded-xl text-left hover:bg-gray-100 dark:hover:bg-gray-[#1d1f29] transition-colors cursor-pointer"
+                            >
+                            <img src={user.avatar || "./default-avatar.png"} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                            <div>
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{user.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">@{user.username}</p>
+                            </div>
+                            </button>
+                        ))
+                    )}
                 </div>
             )}
         </div>

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/useAuth";
 import SearchBar from "./SearchBar";
 import { useTheme } from "../context/useTheme";
-import { Bell, House, LogOut, Menu, Moon, Sun, User } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -16,31 +16,34 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="backdrop-blur-2xl hidden md:flex max-w-2xl mx-auto sticky top-8 border border-[#dcdec1] bg-white dark:bg-black dark:border-[#484843] p-3 items-center justify-between px-8 shadow rounded-lg">
-                <div className="font-bold text-xl cursor-pointer dark:text-white" onClick={() => navigate("/")}>
+            <div className="backdrop-blur-xl hidden md:flex w-[95%] max-w-4xl mx-auto sticky top-6 z-50 border border-gray-200 bg-white/90 dark:bg-black/90 dark:border-[#303336] py-3 items-center px-6 shadow rounded-2xl">
+                <div className="font-bold text-xl cursor-pointer dark:text-white shrink-0 mr-8" onClick={() => navigate("/")}>
                     Socialhive
                 </div>
 
-                <SearchBar />
+                <div className="w-56 shrink-0">
+                    <SearchBar />
+                </div>
 
-                <div className="flex flex-row gap-6">
+
+                <div className="flex items-center gap-2 ml-auto">
                     <button
                         onClick={() => navigate("/")}
-                        className={`cursor-pointer px-2 py-2 border rounded-full dark:border-[#8e8e85] dark:bg-black ${location.pathname === '/' ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
-                        <House size={18} className="dark:text-white" />
+                        className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] ${location.pathname === '/' ? 'bg-gray-100 dark:bg-[#1d1f20]' : ""}`}>
+                        Home
                     </button>
 
                     <button
                         onClick={() => navigate(`/profile/${user.username}`)}
-                        className={`cursor-pointer border px-2 py-2 rounded-full dark:border-[#8e8e85] dark:bg-black ${location.pathname === `/profile/${user.username}` ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
-                        <User size={18} className="dark:text-white" />
+                        className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] ${location.pathname === `/profile/${user.username}` ? 'bg-gray-100 dark:bg-[#1d1f20]    ' : ""}`}>
+                        profile
                     </button>
 
 
                     <button
                         onClick={() => navigate("/notifications")}
-                        className={`cursor-pointer px-2 py-2 rounded-full border dark:border-[#8e8e85] dark:bg-black ${location.pathname === '/notifications' ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
-                        <Bell size={18} className="dark:text-white " />
+                        className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] ${location.pathname === '/notifications' ? 'bg-gray-100 dark:bg-[#1d1f20]   ' : ""}`}>
+                        Notifications
                     </button>
 
                     <button
@@ -51,18 +54,21 @@ export default function Navbar() {
                                 navigate("/login");
                             }
                         }}
-                        className="px-2 py-2 border rounded-full cursor-pointer dark:border-[#8e8e85] dark:bg-black">
-                        <LogOut size={18} className="dark:text-white" />
+                        className="px-4 py-2 text-sm font-medium rounded-lg cursor-pointer dark:text-white hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400 transition-colors">
+                        Logout
                     </button>
-                    <button onClick={toggleTheme} className="cursor-pointer p-2 rounded-full border dark:border-[#8e8e85] dark:bg-black">
-                        {isDark ? <Sun size={18} className="dark:text-white" /> : <Moon size={18} className="dark:text-white" />}
+
+                    <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-1"/>
+
+                    <button onClick={toggleTheme} className="cursor-pointer p-2.5 rounded-full dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] transition-colors">
+                        {isDark ? <Sun size={18}/> : <Moon size={18}/>}
                     </button>
                 </div>
             </div>
 
             <nav className="md:hidden sticky top-0 z-50 bg-white dark:bg-black">
                 <div className="flex items-center justify-between px-4 py-3 dark:text-white">
-                    <span className="text-xl font-bold">Socialhive</span>
+                    <span className="text-xl font-bold" onClick={() => navigate("/")}>Socialhive</span>
                     <SearchBar />
 
                     <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
