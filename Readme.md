@@ -64,3 +64,8 @@ http://localhost:5173
 After creating an account, your feed will initially be empty. This is expected behavior.
 
 Search for other users, visit their profiles, and follow them. Once you follow users who have shared posts, your feed will begin showing content from those accounts and become personalized based on the people you follow.
+
+## Screenshots
+
+![Alt Text](./frontend/public/image.png)
+![Alt Text](./frontend/public/image2.png)
