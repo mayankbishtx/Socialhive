@@ -9,7 +9,7 @@ I built this project to understand how a real-world application like Twitter/X w
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/mayankbisht01/Socialhive.git
+git clone https://github.com/mayankbishtx/Socialhive.git
 cd Socialhive
 ```
 
