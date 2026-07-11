@@ -5,19 +5,21 @@ import api from "../api/axios";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
 
+export type ErrorResponse = {
+    message: string;
+    retryAfter: number;
+}
+
 export default function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
@@ -27,21 +29,17 @@ export default function Login() {
             toast.success(`Welcome Back! ${response.data.user.name}`);
 
         } catch (err) {
-            const error = err as AxiosError<{ error: string, retryAfter: number }>;
+            const error = err as AxiosError<ErrorResponse>;
 
             if (error.response?.status === 429) {
                 const retryAfter = error.response.data?.retryAfter;
-                setError(
-                    retryAfter
-                        ? `Too many attempts. try again in ${Math.ceil(retryAfter / 60)} minutes.`
-                        : "Too many attemps. Please try again later"
+                toast.error(
+                    retryAfter ? `Too many attemps.Try again in ${Math.ceil(retryAfter / 60)} minute(s).`
+                        : error.response?.data?.message
                 );
 
-            } else if (error.response?.status === 401) {
-                setError("Incorrect email or password");
-
             } else {
-                setError("Something went wrong. Please try again.");
+                toast.error(error.response?.data?.message ?? "Something went wrong. Please try again.");
             }
 
         } finally {
@@ -66,7 +64,7 @@ export default function Login() {
                     />
 
                     <input
-                        className="border rounded p-2 w-67 text-black dark:text-white"
+                        className="border rounded p-2 w-67 font-sans text-black dark:text-white"
                         type="password"
                         autoComplete="current-password"
                         value={password}
@@ -81,8 +79,6 @@ export default function Login() {
                             Create Account
                         </Link>
                     </p>
-
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
 
                     <button
                         type="submit"

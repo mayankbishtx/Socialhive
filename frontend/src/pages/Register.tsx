@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import type { ErrorResponse } from "./Login";
 
 export default function Register() {
 
@@ -8,13 +11,11 @@ export default function Register() {
     const [username, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
@@ -22,8 +23,18 @@ export default function Register() {
             navigate("/login");
 
         } catch (err) {
-            console.log(err);
-            setError("Error occurred while registering");
+            const error = err as AxiosError<ErrorResponse>;
+
+            if (error.response?.status === 429) {
+                const retryAfter = error.response.data?.retryAfter;
+                toast.error(
+                    retryAfter ? `Too many attemps.Try again in ${Math.ceil(retryAfter / 60)} minute(s).`
+                        : error.response?.data?.message
+                );
+
+            } else {
+                toast.error(error.response?.data?.message ?? "Something went wrong. Please try again.");
+            }
 
         } finally {
             setLoading(false);
@@ -68,7 +79,7 @@ export default function Register() {
                     />
 
                     <input
-                        className="border dark:border-white rounded p-2 w-67 text-black dark:text-white"
+                        className="border dark:border-white font-sans rounded p-2 w-67 text-black dark:text-white"
                         type="password"
                         autoComplete="current-password"
                         value={password}
@@ -78,14 +89,13 @@ export default function Register() {
                         disabled={loading}
                     />
 
-                    <p className="text-sm text-taupe-400 hover:text-taupe-500 dark:hover:text-gray-300">
+                    <p className="ml-5 text-sm text-taupe-400 hover:text-taupe-500 dark:hover:text-gray-300">
                         Already have an account?&nbsp;
                         <Link to="/login" className="text-blue-500 hover:text-blue-700 underline">
                             Login
                         </Link>
                     </p>
 
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
                     <button
                         type="submit"
                         disabled={loading}

@@ -16,7 +16,7 @@ const loginSchema = z.object({
 export const validateRegister = (req: Request, res: Response, next: NextFunction): void => {
     const result = registrationSchema.safeParse(req.body);
     if(!result.success) {
-        res.status(400).json({ errors: result.error.flatten().fieldErrors });
+        res.status(400).json({ message: result.error.issues[0].message });
         return;
     }
     next();
@@ -25,7 +25,7 @@ export const validateRegister = (req: Request, res: Response, next: NextFunction
 export const validateLogin = (req: Request, res: Response, next: NextFunction): void => {
     const result = loginSchema.safeParse(req.body);
     if(!result.success) {
-        res.status(400).json({ errors: result.error.flatten().fieldErrors });
+        res.status(400).json({ message: result.error.issues[0].message });
         return;
     }
     next();

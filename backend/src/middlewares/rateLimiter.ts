@@ -22,7 +22,7 @@ export default function createRateLimiter({ maxRequest, windowSeconds, keyPrefix
 
             if (current > maxRequest) {
                 const ttl = await redisClient.ttl(key);
-                return res.status(429).json({ error: "Too many requests, try again later", retryAfter: ttl })
+                return res.status(429).json({ message: "Too many requests, try again later", retryAfter: ttl })
             }
 
             next();
