@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import Notifications from "./pages/Notifications";
 import Feed from "./pages/Feed";
 import ErrorPage from "./pages/ErrorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -12,6 +11,10 @@ import Navbar from "./components/Navbar";
 import UpdateProfile from "./pages/UpdateProfile";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
+import { lazy, Suspense } from "react";
+import Loading from "./components/Loading";
+
+const Notifications = lazy(() => import("./pages/Notifications"));
 
 export default function App() {
 
@@ -19,8 +22,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-       <Toaster />
-       
+      <Toaster />
+
       <BrowserRouter>
 
         {accessToken && <Navbar />}
@@ -58,7 +61,9 @@ export default function App() {
 
           <Route path="/notifications" element={
             <ProtectedRoute>
-              <Notifications />
+              <Suspense fallback={<Loading />}>
+                <Notifications />
+              </Suspense>
             </ProtectedRoute>
           } />
 
@@ -66,7 +71,7 @@ export default function App() {
         </Routes>
 
       </BrowserRouter>
-      <Analytics/>
+      <Analytics />
     </div>
   );
 };
