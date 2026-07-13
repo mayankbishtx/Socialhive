@@ -42,7 +42,7 @@ export default function Register() {
     };
 
     return (
-        <div className="h-screen flex items-center justify-center gap-14 bg-linear-to-br from-slate-50 via-blue-50 to-sky-100 dark:from-neutral-900 dark:via-gray-400 dark:to-gray-400">
+        <div className="h-screen flex items-center justify-center gap-14 bg-linear-to-br from-slate-50 via-blue-50 to-sky-100 dark:from-black dark:via-black dark:to-black">
             <div className="flex flex-col items-center px-9 py-18 lg:px-18 lg:py-30">
                 <h1 className="text-3xl text-black font-semibold mb-8 dark:text-white">Create an account</h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -91,7 +91,7 @@ export default function Register() {
 
                     <p className="ml-5 text-sm text-taupe-500 hover:text-taupe-600 dark:hover:text-gray-300">
                         Already have an account?&nbsp;
-                        <Link to="/login" className="text-blue-500 hover:text-blue-600 dark:text-white hover:underline">
+                        <Link to="/login" className="text-blue-500 hover:text-blue-600 hover:underline">
                             Login
                         </Link>
                     </p>

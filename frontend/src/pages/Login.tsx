@@ -48,8 +48,8 @@ export default function Login() {
     }
 
     return (
-        <div className="h-screen flex items-center justify-center gap-14 bg-linear-to-br from-slate-50 via-blue-50 to-sky-100 dark:from-neutral-900 dark:via-gray-400 dark:to-gray-400">
-            <div className=" flex items-center flex-col p-12 py-25">
+        <div className="h-screen flex items-center justify-center gap-14 bg-linear-to-br from-slate-50 via-blue-50 to-sky-100 dark:from-black dark:via-black dark:to-black">
+            <div className=" flex items-center flex-col rounded-2xl p-12 py-25">
                 <h1 className="text-3xl font-semibold text-black mb-8 dark:text-white">Welcome back!</h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <input
@@ -74,7 +74,7 @@ export default function Login() {
                     />
 
                     <p className="text-sm text-taupe-500 hover:text-taupe-600 dark:hover:text-gray-200">Don't have an account?&nbsp;
-                        <Link to="/register" className="text-blue-500 hover:text-blue-600 dark:text-white hover:underline ">
+                        <Link to="/register" className="text-blue-500 hover:text-blue-600 hover:underline ">
                             Create one →
                         </Link>
                     </p>
@@ -83,7 +83,7 @@ export default function Login() {
                         type="submit"
                         disabled={loading}
                         className="mt-4 p-2 self-center border rounded-xl cursor-pointer bg-blue-500 w-full hover:bg-blue-600 
-                    text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black transition-all duration-all ease-in-out hover:translate-y-0.5 hover:shadow-lg">
+                    text-white dark:bg-white dark:hover:bg-gray-300 dark:text-black transition-all duration-all ease-in-out hover:translate-y-0.5 hover:shadow-lg">
                         {loading ? "Logging in..." : "Login"}
                     </button>
                 </form>
