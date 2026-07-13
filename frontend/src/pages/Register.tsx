@@ -43,7 +43,7 @@ export default function Register() {
 
     return (
         <div className="h-screen flex items-center justify-center gap-14 bg-linear-to-br from-slate-50 via-blue-50 to-sky-100 dark:from-neutral-900 dark:via-gray-400 dark:to-gray-400">
-            <div className="flex flex-col items-center px-9 py-18 lg:px-18 lg:py-30 rounded-2xl border-2 border-blue-100 bg-white/70 shadow-xl">
+            <div className="flex flex-col items-center px-9 py-18 lg:px-18 lg:py-30">
                 <h1 className="text-3xl text-black font-semibold mb-8 dark:text-white">Create an account</h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <input
