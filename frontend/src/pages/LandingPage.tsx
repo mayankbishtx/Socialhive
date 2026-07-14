@@ -10,15 +10,15 @@ export default function LandingPage() {
     
     return (
         <>
-        <div className="relative min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-sky-100 dark:from-black dark:via-black dark:to-black dark:text-white">
-            <div onClick={toggleTheme} className="absolute top-10 right-62 rounded-full px-4 py-4 flex items-center dark:text-white cursor-pointer transition-all duration-200 hover:translate-y-0.5">
+        <div className="relative min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-sky-100 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-800 dark:text-white">
+            <button onClick={toggleTheme} className="absolute top-9 md:top-10 right-50 md:right-62 rounded-full px-4 py-4 flex items-center text-neutral-500 hover:text-neutral-700  dark:text-gray-200 dark:hover:text-white cursor-pointer">
                 {isDark ? <Sun size={22}/> : <Moon size={22}/>}
-            </div>
+            </button>
             <a
                 href="https://github.com/mayankbishtx/socialhive" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute flex items-center gap-2 rounded-full border px-4 py-2 bg-white/70 shadow-sm backdrop-blur top-10 right-16 text-black transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                className="absolute flex items-center gap-2 rounded-full border px-2 py-1 md:px-4 md:py-2 bg-white/70 shadow-sm backdrop-blur top-10 right-8 md:right-16 text-black transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
                 <Github 
                     variant="light" 
                     className="size-8 hover:scale-110" 
@@ -26,15 +26,15 @@ export default function LandingPage() {
                  <span className="mt-1 hover:text-black">View Source ↗</span>
             </a>
             <div className="min-h-screen flex flex-col items-center justify-center gap-7 tracking-wide">
-                <div className="mr-13 text-6xl font-bold">
-                    <span className="text-5xl">🐝</span> Socialhive
+                <div className="mr-13 text-5xl md:text-6xl font-bold">
+                    <span className="sm:text-4xl md:text-5xl">🐝</span> Socialhive
                 </div>
-                <div className="flex gap-4 text-4xl font-semibold">
+                <div className="flex gap-4 text-3xl md:text-4xl font-semibold">
                     <span>Connect · </span>
                     <span>Share ·</span>
                     <span>Discover</span>
                 </div>
-                <div className="text-2xl font-medium">
+                <div className="text-lg md:text-2xl font-medium">
                     Join the community, share your thoughts,
                     <br />
                     and connect with people around the world.
