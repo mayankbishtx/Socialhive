@@ -10,7 +10,7 @@ let io: Server;
 export const initSocket = (httpServer: HTTPServer): Server => {
     io = new Server(httpServer, {
         cors: {
-            origin: allowedOrigins,    // had to correct this later
+            origin: allowedOrigins, 
             methods: ["GET", "POST"]
         },
     });

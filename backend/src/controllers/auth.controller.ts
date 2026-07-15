@@ -5,6 +5,7 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from ".
 import type { AuthRequest } from "../types";
 import redis from "../config/redis";
 import logger from "../config/logger";
+import notifyNotifySignup from "../config/resend";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -30,6 +31,8 @@ export const register = async (req: Request, res: Response) => {
             email,
             password: hashedPassword
         });
+
+        await notifyNotifySignup(user);
 
         res.status(201).json({
             message: "User created successfully",
