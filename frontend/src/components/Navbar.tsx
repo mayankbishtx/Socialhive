@@ -3,7 +3,7 @@ import { useAuth } from "../context/useAuth";
 import SearchBar from "./SearchBar";
 import { useTheme } from "../context/useTheme";
 import { Menu, Moon, Sun } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function Navbar() {
 
@@ -11,6 +11,17 @@ export default function Navbar() {
     const { user, logout, authLoading } = useAuth();
     const { isDark, toggleTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
+    const audioRef = useRef(new Audio("/sounds/electic_button.mp3"));
+
+    function playSound() {
+        audioRef.current.currentTime = 0
+        audioRef.current.play();
+    }
+
+    function handleClick() {
+        playSound();
+        toggleTheme();
+    }
 
     if (authLoading || !user) return null;
 
@@ -60,7 +71,7 @@ export default function Navbar() {
 
                     <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-1"/>
 
-                    <button onClick={toggleTheme} className="cursor-pointer p-2.5 rounded-full dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] transition-colors">
+                    <button onClick={handleClick} className="cursor-pointer p-2.5 rounded-full dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] transition-colors">
                         {isDark ? <Sun size={18}/> : <Moon size={18}/>}
                     </button>
                 </div>
@@ -104,7 +115,7 @@ export default function Navbar() {
                             }}>
                                 Logout
                             </button>
-                            <button onClick={toggleTheme}>
+                            <button onClick={handleClick}>
                                 {isDark ? "Light Mode" : "Dark Mode"}
                             </button>
 
