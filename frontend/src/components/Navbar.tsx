@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/useAuth";
 import SearchBar from "./SearchBar";
 import { useTheme } from "../context/useTheme";
@@ -58,9 +58,9 @@ export default function Navbar() {
     return (
         <>
             <div className="backdrop-blur-xl hidden md:flex w-[95%] max-w-4xl mx-auto sticky top-6 z-50 border border-gray-200 bg-white/90 dark:bg-black/90 dark:border-[#303336] py-3 items-center px-6 shadow rounded-2xl">
-                <div className="font-bold text-xl cursor-pointer dark:text-white shrink-0 mr-8" onClick={() => navigate("/")}>
+                <Link to="/home" className="font-bold text-xl cursor-pointer dark:text-white shrink-0 mr-8" >
                     🐝 Socialhive
-                </div>
+                </Link>
 
                 <div className="w-56 shrink-0">
                     <SearchBar />
@@ -68,24 +68,24 @@ export default function Navbar() {
 
 
                 <div className="flex items-center gap-2 ml-auto">
-                    <button
-                        onClick={() => navigate("/home")}
+                    <Link
+                        to="/home"
                         className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] ${location.pathname === '/home' ? 'bg-gray-100 dark:bg-[#1d1f20]' : ""}`}>
                         Home
-                    </button>
+                    </Link>
 
-                    <button
-                        onClick={() => navigate(`/profile/${user.username}`)}
+                    <Link
+                        to={`/profile/${user.username}`}
                         className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] ${location.pathname === `/profile/${user.username}` ? 'bg-gray-100 dark:bg-[#1d1f20]    ' : ""}`}>
                         profile
-                    </button>
+                    </Link>
 
 
-                    <button
-                        onClick={() => navigate("/notifications")}
+                    <Link
+                        to="/notifications"
                         className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] ${location.pathname === '/notifications' ? 'bg-gray-100 dark:bg-[#1d1f20]   ' : ""}`}>
                         Notifications
-                    </button>
+                    </Link>
 
                     <button
                         onClick={async () => {
