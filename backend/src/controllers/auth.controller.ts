@@ -6,6 +6,8 @@ import type { AuthRequest } from "../types";
 import redis from "../config/redis";
 import logger from "../config/logger";
 import notifyUserSignup from "../services/email.service";
+import Verification from "../models/email-verification.model";
+import { sendOTP } from "../services/verificationEmail";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -23,17 +25,54 @@ export const register = async (req: Request, res: Response) => {
             return;
         }
 
+        const otp = Math.floor(100000 + Math.random() * 900000);
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        await Verification.findOneAndUpdate(
+            { email },
+            {
+                name,
+                email,
+                password: hashedPassword,
+                otp,
+                expiresAt: new Date(Date.now() + 10 * 60 * 1000)
+            },
+            { upsert: true, returnDocument: 'after' }
+        );
+
+        await sendOTP(email, otp);
+
+        res.status(201).json({ message: "OTP sent successfully" });
+
+    } catch (error) {
+        logger.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+export const verifyEmail = async(req: Request, res: Response) => {
+    try {
+        const { email, otp } = req.body;
+
+        const record = await Verification.findOne({ email });
+
+        if (!record) return res.status(404).json({ message: "OTP not found" });
+        if (record.otp != otp) return res.status(400).json({ message: "Wrong OTP" });
+        if (record.expiresAt < new Date()) return res.status(400).json({ message: "OTP expired" });
+
+
         const user = await User.create({
-            name,
-            username,
-            email,
-            password: hashedPassword
+            name: record.name,
+            username: record.username,
+            email: record.email,
+            password: record.password
         });
 
-        await notifyUserSignup(user);
+        await Verification.deleteOne({ email });
 
+        await notifyUserSignup(user);
+        
         res.status(201).json({
             message: "User created successfully",
             user: {
@@ -42,7 +81,7 @@ export const register = async (req: Request, res: Response) => {
                 email: user.email
             }
         });
-
+        
     } catch (error) {
         logger.error(error);
         res.status(500).json({ message: "Internal Server Error" });
