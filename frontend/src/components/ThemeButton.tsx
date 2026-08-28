@@ -9,7 +9,7 @@ export default function ThemeButton() {
     const { isDark, toggleTheme } = useTheme();
     const audioRef = useRef(new Audio("/sounds/electic_button.mp3"));
 
-    const showButton = ["/", "/login", "/register"].includes(pathname);
+    const showButton = ["/", "/login", "/register", "/verify-email"].includes(pathname);
 
     if (!showButton) return null;
 

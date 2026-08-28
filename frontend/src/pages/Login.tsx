@@ -83,7 +83,7 @@ export default function Login() {
                         type="submit"
                         disabled={loading}
                         className="mt-4 p-2 border rounded-xl cursor-pointer bg-black w-full hover:bg-neutral-800 
-                    text-white dark:bg-white dark:hover:bg-gray-100 dark:text-black transition-all duration-all ease-in-out hover:translate-y-0.5 hover:shadow-lg">
+                    text-white dark:bg-white dark:hover:bg-gray-100 dark:text-black transition-all duration-all ease-in-out hover:translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
                         {loading ? "Logging in..." : "Login"}
                     </button>
                 </form>

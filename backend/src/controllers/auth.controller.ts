@@ -33,6 +33,7 @@ export const register = async (req: Request, res: Response) => {
             { email },
             {
                 name,
+                username,
                 email,
                 password: hashedPassword,
                 otp,

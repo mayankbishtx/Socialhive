@@ -19,4 +19,3 @@ export default function timeAgo(date: string): string {
         ...(isCurrentYear ? {} : { year: "numeric"}),
     });
 }
-

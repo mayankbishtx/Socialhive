@@ -20,7 +20,7 @@ export default function Register() {
 
         try {
             await api.post("/auth/register", { name, username, email, password });
-            navigate("/login");
+            navigate("/verify-email", { state: { email } });
 
         } catch (err) {
             const error = err as AxiosError<ErrorResponse>;
@@ -100,7 +100,7 @@ export default function Register() {
                         type="submit"
                         disabled={loading}
                         className="mt-4 p-2 self-center border rounded-xl cursor-pointer w-full
-                    bg-black hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-gray-100 dark:text-black transition-all duration-200 ease-in-out hover:translate-y-0.5 hover:shadow-lg">
+                    bg-black hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-gray-100 dark:text-black transition-all duration-200 ease-in-out hover:translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
                         {loading ? "Registering..." : "Register"}
                     </button>
                 </form>

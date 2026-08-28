@@ -15,6 +15,7 @@ import { lazy, Suspense } from "react";
 import Loading from "./components/Loading";
 import LandingPage from "./pages/LandingPage";
 import ThemeButton from "./components/ThemeButton";
+import VerifyEmail from "./pages/VerifyEmail";
 
 const Notifications = lazy(() => import("./pages/Notifications"));
 
@@ -41,6 +42,12 @@ export default function App() {
           <Route path="/register" element={
             <PublicRoute>
               <Register />
+            </PublicRoute>
+          } />
+
+          <Route path="/verify-email" element={
+            <PublicRoute>
+              <VerifyEmail />
             </PublicRoute>
           } />
 
