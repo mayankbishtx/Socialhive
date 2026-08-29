@@ -16,6 +16,7 @@ import Loading from "./components/Loading";
 import LandingPage from "./pages/LandingPage";
 import ThemeButton from "./components/ThemeButton";
 import VerifyEmail from "./pages/VerifyEmail";
+import EmailVerificationRoute from "./components/EmailVerificationRoute";
 
 const Notifications = lazy(() => import("./pages/Notifications"));
 
@@ -46,9 +47,9 @@ export default function App() {
           } />
 
           <Route path="/verify-email" element={
-            <PublicRoute>
+            <EmailVerificationRoute>
               <VerifyEmail />
-            </PublicRoute>
+            </EmailVerificationRoute>
           } />
 
           <Route path="/" element={

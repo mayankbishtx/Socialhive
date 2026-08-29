@@ -19,7 +19,10 @@ export default function Register() {
         setLoading(true);
 
         try {
-            await api.post("/auth/register", { name, username, email, password });
+            const res = await api.post("/auth/register", { name, username, email, password });
+
+            sessionStorage.setItem("verificationToken", res.data.verificationToken);
+
             navigate("/verify-email", { state: { email } });
 
         } catch (err) {

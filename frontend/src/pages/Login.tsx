@@ -75,7 +75,7 @@ export default function Login() {
 
                     <p className="text-sm text-taupe-500 hover:text-taupe-600 dark:text-neutral-400 dark:hover:text-gray-200">Don't have an account?&nbsp;
                         <Link to="/register" className="text-blue-500 hover:text-blue-600 hover:underline ">
-                            Create one →
+                            Create one &rarr;
                         </Link>
                     </p>
 
