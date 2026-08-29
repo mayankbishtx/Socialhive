@@ -5,7 +5,8 @@ export interface IVerification extends Document {
     username: string;
     email: string;
     password: string;
-    otp: number;
+    otp: string;
+    verificationToken: string;
     expiresAt: Date;
 }
 
@@ -27,8 +28,11 @@ const verificationSchema = new Schema<IVerification>({
         required: [true, "Password is required"],
     },
     otp: {
-        type: Number,
+        type: String,
         required: [true, "OTP is required"],
+    },
+    verificationToken: {
+        type: String
     },
     expiresAt: {
         type: Date,

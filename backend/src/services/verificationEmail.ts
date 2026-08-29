@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export async function sendOTP(email: string, otp: number) {
+export async function sendOTP(email: string, otp: string) {
     await transporter.sendMail({
         from: process.env.EMAIL,
         to: email,

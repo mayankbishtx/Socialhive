@@ -8,6 +8,7 @@ import logger from "../config/logger";
 import notifyUserSignup from "../services/email.service";
 import Verification from "../models/email-verification.model";
 import { sendOTP } from "../services/verificationEmail";
+import crypto from "crypto";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -25,9 +26,11 @@ export const register = async (req: Request, res: Response) => {
             return;
         }
 
-        const otp = Math.floor(100000 + Math.random() * 900000);
-
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        const otp = crypto.randomInt(100000, 999999).toString();
+
+        const verificationToken = crypto.randomBytes(32).toString("hex");
 
         await Verification.findOneAndUpdate(
             { email },
@@ -37,14 +40,18 @@ export const register = async (req: Request, res: Response) => {
                 email,
                 password: hashedPassword,
                 otp,
-                expiresAt: new Date(Date.now() + 10 * 60 * 1000)
+                verificationToken,
+                expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
             },
             { upsert: true, returnDocument: 'after' }
         );
 
         await sendOTP(email, otp);
 
-        res.status(201).json({ message: "OTP sent successfully" });
+        res.status(201).json({ 
+            message: "OTP sent successfully", 
+            verificationToken
+        });
 
     } catch (error) {
         logger.error(error);
