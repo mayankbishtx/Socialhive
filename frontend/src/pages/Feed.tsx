@@ -89,7 +89,7 @@ export default function Feed() {
                             <p className="ml-12 font-medium">{post.content}</p>
                             {post.image && <img src={post.image} onClick={() => setSelectedImage(post.image!)} className="mt-2 rounded-2xl border border-neutral-300 dark:border-[#303336]" />}
 
-                            <button onClick={() => handleLike(post._id, isLiked)} className="flex items-center gap-1 mt-2">
+                            <button onClick={() => handleLike(post._id, isLiked)} className="flex items-center gap-1 mt-2 cursor-pointer">
                                 <Heart size={18}
                                     className={isLiked ? "fill-red-500 text-red-500" : "text-gray-400"} /> {post.likes.length}
                             </button>
