@@ -69,7 +69,6 @@ export const verifyEmail = async(req: Request, res: Response) => {
         if (record.otp != otp) return res.status(400).json({ message: "Wrong OTP" });
         if (record.expiresAt < new Date()) return res.status(400).json({ message: "OTP expired" });
 
-
         const user = await User.create({
             name: record.name,
             username: record.username,
