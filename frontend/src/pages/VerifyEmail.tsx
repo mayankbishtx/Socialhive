@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom"
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import type { SubmitEvent } from "react";
 
 export default function VerifyEmail() {
 
@@ -11,15 +12,13 @@ export default function VerifyEmail() {
     const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState("");
 
-    async function handleVerify(e: React.FormEvent) {
+    async function handleVerify(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         setLoading(false);
 
         try {
             await api.post("/auth/verify-email", { email, otp: Number(otp) });
             navigate("/login");
-
-            
 
         } catch (err) {
             console.log("Verification Error", err);

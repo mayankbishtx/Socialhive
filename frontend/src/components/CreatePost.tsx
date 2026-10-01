@@ -3,6 +3,7 @@ import api from "../api/axios";
 import toast from "react-hot-toast";
 import type { Posts } from "../types";
 import { useAuth } from "../context/useAuth";
+import type { SubmitEvent } from 'react';
 
 interface CreatePostProps {
     onPostCreated: (newPost: Posts) => void;
@@ -14,7 +15,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
     const [posting, setPosting] = useState(false);
     const { user } = useAuth();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!content.trim() && !imageFile) {
             toast.error("Post cannot be empty")

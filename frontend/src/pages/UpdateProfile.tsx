@@ -3,6 +3,7 @@ import { useAuth } from "../context/useAuth"
 import { useState } from "react";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import type { SubmitEvent } from "react";
 
 export default function UpdateProfile() {
 
@@ -14,7 +15,7 @@ export default function UpdateProfile() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError("");

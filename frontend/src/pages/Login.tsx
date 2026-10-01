@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
+import type { SubmitEvent } from "react";
+
 
 export type ErrorResponse = {
     message: string;
@@ -18,7 +20,7 @@ export default function Login() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 

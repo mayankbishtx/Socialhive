@@ -4,6 +4,7 @@ import api from "../api/axios";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import type { ErrorResponse } from "./Login";
+import type { SubmitEvent } from "react";
 
 export default function Register() {
 
@@ -14,7 +15,7 @@ export default function Register() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
