@@ -77,7 +77,7 @@ export default function Navbar() {
                     <Link
                         to={`/profile/${user.username}`}
                         className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors dark:text-white hover:bg-gray-100 dark:hover:bg-[#1d1f20] ${location.pathname === `/profile/${user.username}` ? 'bg-gray-100 dark:bg-[#1d1f20]    ' : ""}`}>
-                        profile
+                        Profile
                     </Link>
 
 
@@ -137,7 +137,7 @@ export default function Navbar() {
                                 Notifications
                             </button>
                             <button onClick={async () => {
-                                const confirmed = window.confirm("Are you sure u want to logout?")
+                                const confirmed = window.confirm("Are you sure you want to logout?")
                                 if (confirmed) {
                                     await logout();
                                     navigate("/login");
